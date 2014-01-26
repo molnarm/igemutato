@@ -1,0 +1,15 @@
+{
+	"manifest_version": 2,
+	"name": "Szentírás",
+	"description": "Bibliai hivatkozások beillesztése",
+	"version": "0.1",
+	"permissions": [
+	    "http://szentiras.hu/"
+	],
+	"content_scripts": [
+		{
+			"matches": [ "http://*/*", "https://*/*" ],
+			"js": ["igezo.min.js"]
+		}
+	]
+}
