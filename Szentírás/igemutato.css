@@ -1,0 +1,18 @@
+a.ige-link{
+	text-decoration: underline;
+	color: green;
+}
+#igemutato{	
+	position: absolute;
+	padding: 5px;
+	z-index: 1000;
+	border: 1px solid black;
+	background: white;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5); /* TODO ez bezavar a magasságba */
+	font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+	font-size: 13px;
+	color: black;
+	text-align: justify;
+	overflow: auto;
+	resize: both;
+}

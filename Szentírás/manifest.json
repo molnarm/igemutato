@@ -1,6 +1,6 @@
 {
 	"manifest_version": 2,
-	"name": "Szentírás",
+	"name": "Igemutató",
 	"description": "Bibliai hivatkozások beillesztése",
 	"version": "0.1",
 	"permissions": [
@@ -9,7 +9,8 @@
 	"content_scripts": [
 		{
 			"matches": [ "http://*/*", "https://*/*" ],
-			"js": ["igezo.min.js"]
+			"js": ["igemutato.min.js", "chrome_content.js"],
+			"css": ["igemutato.css"]
 		}
 	]
 }

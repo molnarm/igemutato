@@ -4,7 +4,7 @@ var Szentiras = (function() {
 		// API URL
 		api : 'http://szentiras.hu/API/?feladat=idezet&hivatkozas=',
 		// tooltip szélesség
-		tipW : 400,
+		tipW : 300,
 		// tooltip magasság
 		tipH : 200,
 		// tooltip távolsága a szövegtől / képenyő szélétől
@@ -12,7 +12,9 @@ var Szentiras = (function() {
 		// tooltip megjelenítési késleltetés
 		tipShow : 200,
 		// tooltip elrejtési késleltetés
-		tipHide : 500
+		tipHide : 500,
+		// kizárt tagek
+		excludeTags : "head|script|input|select|textarea|h1|h2|h3|a|"
 	};
 
 	var tooltip, linkTimeout, tipTimeout;
@@ -25,7 +27,7 @@ var Szentiras = (function() {
 			do {
 				next = node.nextSibling;
 				parent = node.parentNode;
-				if (node.nodeType === 1) {
+				if (node.nodeType === 1 && config.excludeTags.indexOf(node.nodeName.toLowerCase() + '|') == -1) {
 					keres(node);
 				}
 				else if (node.nodeType === 3) {
@@ -52,7 +54,7 @@ var Szentiras = (function() {
 
 	function csere(szoveg) {
 		var a = d.createElement('a');
-		a.style.background = "#000";
+		a.className += ' ige-link';
 		a.appendChild(d.createTextNode(szoveg[0]));
 		a.addEventListener("mouseover", function(event) {
 			// ha rámutatunk egy hivatkozásra, akkor új tooltipet jelenítünk meg
@@ -124,7 +126,9 @@ var Szentiras = (function() {
 
 	function showTooltip(event) {
 		var a = event.target || event.srcElement;
+		ajax(a);
 		tooltip = tooltip || d.createElement('div');
+		tooltip.id = "igemutato";
 		tooltip.addEventListener("mouseover", function() {
 			// amíg a tooltipen van az egér, addig marad megjelenítve
 			if (tipTimeout) {
@@ -151,25 +155,16 @@ var Szentiras = (function() {
 		triggerH = a.offsetHeight;
 		screenW = b.clientWidth || window.innerWidth;
 
-		// ha a tooltip nem lóg ki az ablak tetején, akkor az elem fölé kerül, egyébként alá
-		tooltip.style.top = ((r.top > config.tipH + config.tipD) ? (offsetTop - config.tipH - config.tipD) : (offsetTop
-				+ triggerH + config.tipD))
-				+ "px";
-		// ha a tooltip kilógna bal oldalt, akkor úgy helyezzük el, hogy még pont elférjen, egyébként az elem fölé
-		tooltip.style.left = (((offsetLeft + config.tipW) > screenW) ? (screenW - config.tipW - config.tipD)
-				: offsetLeft)
-				+ "px";
+		// ha a tooltip nem lóg ki az ablak tetején, akkor az elem fölé kerül,
+		// egyébként alá
+		tooltip.style.top = ((r.top > config.tipH + config.tipD) ? (offsetTop - config.tipH - config.tipD) : (offsetTop + triggerH + config.tipD)) + "px";
+		// ha a tooltip kilógna bal oldalt, akkor úgy helyezzük el, hogy még
+		// pont elférjen, egyébként az elem fölé
+		tooltip.style.left = (((offsetLeft + config.tipW) > screenW) ? (screenW - config.tipW - config.tipD) : offsetLeft) + "px";
 		tooltip.style.width = config.tipW + "px";
 		tooltip.style.height = config.tipH + "px";
-		tooltip.style.zIndex = "1000";
-		tooltip.style.position = "absolute";
-		tooltip.style.border = "1px solid black";
-		tooltip.style.background = "inherit";
-		tooltip.style.overflow = "auto";
-		tooltip.style.resize = "both";
 
 		b.appendChild(tooltip);
-		ajax(a);
 	}
 
 	return {
@@ -177,5 +172,3 @@ var Szentiras = (function() {
 		keres : keres
 	};
 })();
-
-Szentiras.keres(document.body);
