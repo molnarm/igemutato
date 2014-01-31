@@ -15,9 +15,9 @@
 	z-index: 1000;
 	border: 1px solid black;
 	box-shadow: 0 0 10px rgba(0,0,0,0.5);
-	text-align: justify;
 }
 #igemutato .szoveg{
+	text-align: justify;
 	padding: 5px;
 	overflow: auto;
 }
@@ -28,5 +28,5 @@
 	width: 100%;
 	bottom: 0;
 	height:20px;
-	text-align: right;
+	text-align: left;
 }

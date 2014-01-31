@@ -2,14 +2,16 @@
 	"manifest_version": 2,
 	"name": "Igemutató",
 	"description": "Bibliai hivatkozások beillesztése a Szentírás.hu oldalról",
-	"version": "0.1",
+	"version": "0.2",
 	"permissions": [
+		"storage",
 	    "http://szentiras.hu/"
 	],
+	"options_page": "options.html",
 	"content_scripts": [
 		{
 			"matches": [ "http://*/*", "https://*/*" ],
-			"js": ["igemutato.min.js", "chrome_content.js"],
+			"js": ["igemutato.min.js", "content.js"],
 			"css": ["igemutato.min.css"]
 		}
 	]
