@@ -67,7 +67,7 @@ var Szentiras = (function() {
 			// ha rámutatunk egy hivatkozásra, akkor új tooltipet jelenítünk meg
 			clearTimeout(linkTimeout);
 			clearTimeout(tipTimeout);
-			tooltip && tooltip.parentNode.removeChild(tooltip);
+			tooltip && (tooltip.parentNode.removeChild(tooltip), tooltip = null);
 			linkTimeout = setTimeout(function() {
 				showTooltip(event);
 			}, config.tipShow);
