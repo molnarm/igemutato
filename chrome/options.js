@@ -9,16 +9,6 @@ function save_options() {
 		excludeTags : document.getElementById("excludeTags").value,
 	};
 
-	// TODO bohóckodás helyett split() az ellenőrzésnél
-	if (config.excludeTags.length > 0) {
-		if (config.excludeTags.slice(-1) != ',') {
-			config.excludeTags += ',';
-		}
-		if (config.excludeTags.charAt(0) != ',') {
-			config.excludeTags = ',' + config.excludeTags;
-		}
-	}
-
 	chrome.storage.sync.set({
 		'config' : config
 	}, function() {
@@ -36,10 +26,9 @@ function restore_options() {
 		forditas : 'SZIT',
 		tipW : 300,
 		tipH : 200,
-		tipD : 10,
 		tipShow : 200,
 		tipHide : 500,
-		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a,"
+		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a"
 	};
 
 	chrome.storage.sync.get('config', function(result) {
