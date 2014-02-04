@@ -65,22 +65,20 @@ var Szentiras = (function() {
 		a.appendChild(d.createTextNode(hivatkozas[0]));
 		a.addEventListener("mouseover", function(event) {
 			// ha rámutatunk egy hivatkozásra, akkor új tooltipet jelenítünk meg
-			linkTimeout && clearTimeout(linkTimeout);
+			clearTimeout(linkTimeout);
+			clearTimeout(tipTimeout);
+			tooltip && tooltip.parentNode.removeChild(tooltip);
 			linkTimeout = setTimeout(function() {
-				tipTimeout && (clearTimeout(tipTimeout), tipTimeout = null);
-				tooltip && tooltip.parentNode.removeChild(tooltip);
 				showTooltip(event);
-				linkTimeout = null;
 			}, config.tipShow);
 		}, false);
 		a.addEventListener("mouseout", function() {
 			// ha elvisszük az egeret a hivatkozásról, akkor elrejtjük a tooltipet
 			linkTimeout && (clearTimeout(linkTimeout), linkTimeout = null);
 			if (tooltip) {
-				tipTimeout && clearTimeout(tipTimeout);
+				clearTimeout(tipTimeout);
 				tipTimeout = setTimeout(function() {
 					tooltip && (tooltip.parentNode.removeChild(tooltip), tooltip = null);
-					tipTimeout = null;
 				}, config.tipHide);
 			}
 		});
@@ -144,14 +142,13 @@ var Szentiras = (function() {
 		tooltip.id = "igemutato";
 		tooltip.addEventListener("mouseover", function() {
 			// amíg a tooltipen van az egér, addig marad megjelenítve
-			tipTimeout && (clearTimeout(tipTimeout), tipTimeout = null);
+			clearTimeout(tipTimeout);
 		}, false);
 		tooltip.addEventListener("mouseout", function() {
 			// ha elvisszük róla az egeret, akkor elrejtjük
-			tipTimeout && clearTimeout(tipTimeout);
+			clearTimeout(tipTimeout);
 			tipTimeout = setTimeout(function() {
 				tooltip && (tooltip.parentNode.removeChild(tooltip), tooltip = null);
-				tipTimeout = null;
 			}, config.tipHide);
 		});
 		
