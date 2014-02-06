@@ -1,0 +1,1 @@
+Szentiras.keres(document.body);

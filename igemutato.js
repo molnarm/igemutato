@@ -105,7 +105,7 @@ var Szentiras = (function() {
 
 	function ajax(link) {
 		xmlhttp && xmlhttp.abort();
-		xmlhttp = createCORSRequest('GET', api + encodeURI(link.innerText) + '&forditas=' + config.forditas);
+		xmlhttp = createCORSRequest('GET', api + encodeURI(link.textContent) + '&forditas=' + config.forditas);
 
 		xmlhttp.onreadystatechange = function() {
 			if (!tooltip)
@@ -115,10 +115,10 @@ var Szentiras = (function() {
 				if (json && json.valasz && json.valasz.versek && json.valasz.versek.length) {
 					for ( var i = 0; i < json.valasz.versek.length; i++)
 						result += json.valasz.versek[i].szoveg + ' ';
-					szoveg.innerText = result;
+					szoveg.textContent = result;
 				}
 				else {
-					szoveg.innerText = 'A betöltés sikertelen :-(';
+					szoveg.textContent = 'A betöltés sikertelen :-(';
 				}
 			}
 		};
@@ -136,8 +136,8 @@ var Szentiras = (function() {
 				igehely = d.createElement('div'), igehely.className += 'igehely', tooltip.appendChild(igehely)
 		);
 
-		igehely.innerHTML = '&nbsp;<a href="' + olvasas + config.forditas + '/' + encodeURI(a.innerText.replace(/\s/g, "")) + '"><b>'+ a.innerText + '</b>&nbsp;(szentiras.hu)&nbsp;&raquo;</a>';
-		szoveg.innerText = "Betöltés...";
+		igehely.innerHTML = '&nbsp;<a href="' + olvasas + config.forditas + '/' + encodeURI(a.textContent.replace(/\s/g, "")) + '"><b>'+ a.textContent + '</b>&nbsp;(szentiras.hu)&nbsp;&raquo;</a>';
+		szoveg.textContent = "Betöltés...";
 		
 		tooltip.id = "igemutato";
 		tooltip.addEventListener("mouseover", function() {
