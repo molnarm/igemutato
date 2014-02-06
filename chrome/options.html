@@ -1,6 +1,15 @@
 <html>
 <head>
 <title>Szentírás beállítások</title>
+<style>
+tr td:first-child{
+	margin-right: 20px;
+	font-weight: bold;
+}
+#status{
+	font-style: italic;
+}
+</style>
 </head>
 
 <body>
@@ -16,23 +25,27 @@
 		</tr>
 		<tr>
 			<td>Felugró ablak méretei (min. 100x50):</td>
-			<td><label for="tipW">szélesség:</label><input id="tipW" type="number" min="100" /></td>
-			<td><label for="tipH">magasság:</label><input id="tipH" type="number" min="50" /></td>
+			<td><label for="tipW">szélesség:</label></td>
+			<td><input id="tipW" type="number" min="100" /></td>
+			<td><label for="tipH">magasság:</label></td>
+			<td><input id="tipH" type="number" min="50" /></td>
 		</tr>
 		<tr>
 			<td>Késleltetések (ezredmásodperc):</td>
-			<td><label for="tipShow">megjelenítés:</label><input id="tipShow" type="number" min="0" /></td>
-			<td><label for="tipHide">elrejtés:</label><input id="tipHide" type="number" min="0" /></td>
+			<td><label for="tipShow">megjelenítés:</label></td>
+			<td><input id="tipShow" type="number" min="0" /></td>
+			<td><label for="tipHide">elrejtés:</label></td>
+			<td><input id="tipHide" type="number" min="0" /></td>
 		</tr>
 		<tr>
 			<td><label for="excludeTags">Ezekben az elemekben ne keressen:</label></td>
-			<td colspan="2"><input id="excludeTags" type="text" size="100" /></td>
+			<td colspan="4"><input id="excludeTags" type="text" size="100" /></td>
 		</tr>
-	</table>
-
-	<br>
-	<div id="status"></div>
-	<button id="save">Mentés</button>
+		<tr>
+			<td><button id="save">Mentés</button></td>
+			<td colspan="3"><span id="status"></span></td>
+		</tr>
+	</table>	
 </body>
 
 <script type="text/javascript" src="options.js"></script>
