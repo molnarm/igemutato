@@ -10,18 +10,19 @@ function save_options() {
 	};
 
 	chrome.storage.sync.set({
-		'config' : config
+		'config' : validate_options(config)
 	}, function() {
-		var status = document.getElementById("status");
+		restore_options();
+		
+		var status = document.getElementById("status");		
 		status.innerHTML = "Elmentettük a beállításokat.";
 		setTimeout(function() {
 			status.innerHTML = "";
 		}, 1000);
 	});
-
 }
 
-function restore_options() {
+function validate_options(options) {
 	var defaults = {
 		forditas : 'SZIT',
 		tipW : 300,
@@ -31,23 +32,39 @@ function restore_options() {
 		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a"
 	};
 
+	var tipW = parseInt(options.tipW),
+	tipH = parseInt(options.tipH),
+	tipShow = parseInt(options.tipShow),
+	tipHide = parseInt(options.tipHide),
+	forditas = options.forditas;
+
+	options.tipW = (isNaN(tipW) || tipW < 100) ? defaults.tipW : tipW;
+	options.tipH = (isNaN(tipH) || tipW < 50) ? defaults.tipH : tipH;
+	options.tipShow = (isNaN(tipShow) || tipShow < 0) ? defaults.tipShow : tipShow;
+	options.tipHide = (isNaN(tipHide) || tipHide < 0) ? defaults.tipHide : tipHide;
+	options.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF' ].indexOf(forditas) == -1) ? defaults.forditas : forditas;
+
+	return options;
+}
+
+function restore_options() {
 	chrome.storage.sync.get('config', function(result) {
-		var config = result.config || defaults;
+		var config = validate_options(result.config);
 
 		var select = document.getElementById("forditas");
-		for ( var i = 0; i < select.children.length; i++) {
+		for (var i = 0; i < select.children.length; i++) {
 			var child = select.children[i];
-			if (child.value == (config.forditas || defaults.forditas)) {
+			if (child.value == (config.forditas)) {
 				child.selected = "true";
 				break;
 			}
 		}
 
-		document.getElementById("tipH").value = config.tipH || defaults.tipH;
-		document.getElementById("tipW").value = config.tipW || defaults.tipW;
-		document.getElementById("tipShow").value = config.tipShow || defaults.tipShow;
-		document.getElementById("tipHide").value = config.tipHide || defaults.tipHide;
-		document.getElementById("excludeTags").value = config.excludeTags || defaults.excludeTags;
+		document.getElementById("tipH").value = config.tipH;
+		document.getElementById("tipW").value = config.tipW;
+		document.getElementById("tipShow").value = config.tipShow;
+		document.getElementById("tipHide").value = config.tipHide;
+		document.getElementById("excludeTags").value = config.excludeTags;
 	});
 }
 
