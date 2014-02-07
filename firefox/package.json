@@ -8,5 +8,65 @@
 	"version": "0.1",
 	"permissions": {
 		"cross-domain-content": ["http://szentiras.hu/"]
-	}
+	},
+	"preferences":  [
+		{
+	        "name": "forditas",
+	        "title": "Fordítás",
+	        "description": "Ezt a fordítást használja az igék megjelenítéséhez",
+	        "type": "menulist",
+	        "value": "SZIT",
+	        "options": [
+		        {
+		            "value": "KNB",
+		            "label": "Káldi-Neovulgáta (katolikus)"
+		        },
+		        {
+		            "value": "SZIT",
+		            "label": "Szent István Társulati Biblia (katolikus)"
+		        },
+		        {
+		            "value": "KG",
+		            "label": "Károli Gáspár revideált fordítása (protestáns)"
+		        },
+		        {
+		            "value": "UF",
+		            "label": "Magyar Bibliatársulat újfordítású Bibliája (protestáns)"
+		        }
+		    ]
+	    },
+	    {
+	        "name": "tipH",
+	        "title": "Felugró ablak magassága",
+	        "type": "integer",
+	        "value": 200
+	    },
+	    {
+	        "name": "tipW",
+	        "title": "Felugró ablak szélessége",
+	        "type": "integer",
+	        "value": 300
+	    },
+	    {
+	        "name": "tipShow",
+	        "title": "Megjelenítési késleltetés",
+	        "description": "Egy hivatkozásra mutatva ennyi idő (msec) múlva jelenik meg a felugró ablak",
+	        "type": "integer",
+	        "value": 200
+	    },
+	    {
+	        "name": "tipHide",
+	        "title": "Elrejtési késleltetés",
+	        "description": "Ennyi idő (msec) múlva tűnik el a felugró ablak",
+	        "type": "integer",
+	        "value": 500
+	    },
+	    {
+	        "name": "excludeTags",
+	        "title": "Kizárt elemek",
+	        "description": "Ezekben a HTML elemekben nem jelennek meg hivatkozások",
+	        "type": "string",
+	        "value": "head,script,input,select,textarea,h1,h2,h3,a"
+	    }
+	]
 }
