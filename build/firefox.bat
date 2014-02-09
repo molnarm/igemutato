@@ -6,7 +6,7 @@ echo Firefox packaging
 call cfx xpi
 
 echo Moving .xpi file
-move /y *.xpi ../
+move /y *.xpi ../firefox.xpi
 
 echo.
 echo Done.
