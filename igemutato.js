@@ -1,6 +1,5 @@
 var Szentiras = (function() {
 	
-	// beállítások, kívülről felülírható
 	var config = {
 		// fordítás
 		forditas: 'SZIT',
@@ -9,7 +8,7 @@ var Szentiras = (function() {
 		// tooltip magasság
 		tipH : 200,
 		// tooltip távolsága a szövegtől / képenyő szélétől
-		tipD : 0, // a drop-shadow miatt, egyébként 10
+		tipD : 5,
 		// tooltip megjelenítési késleltetés
 		tipShow : 200,
 		// tooltip elrejtési késleltetés
@@ -20,9 +19,8 @@ var Szentiras = (function() {
 	
 	regexp = /([12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))(?: ?[0-9]+)(?:[;,.\- ]*[0-9]+[a-z]?)*/g,
 	// API URL
-	api = 'http://szentiras.hu/API/?feladat=idezet&hivatkozas=',
-	// szöveg
-	olvasas ='http://szentiras.hu/',
+	url ='http://szentiras.hu/',
+	api = url + 'API/?feladat=idezet&hivatkozas=',
 	
 	tooltip, szoveg, igehely, linkTimeout, tipTimeout, xmlhttp, d = document, e = d.documentElement, b = d.body, excludes;
 	
@@ -46,14 +44,12 @@ var Szentiras = (function() {
 						if (!replacementNode)
 							continue;
 
-						parent.insertBefore(d.createTextNode(RegExp.leftContext), node);
-						parent.insertBefore(replacementNode, node);
+						parent.insertBefore(d.createTextNode(RegExp.leftContext), parent.insertBefore(replacementNode, node));
 
 						text = RegExp.rightContext;
 						regexp.lastIndex = 0;
 					}
-					parent.insertBefore(d.createTextNode(text), node);
-					parent.removeChild(node);
+					parent.replaceChild(d.createTextNode(text), node);
 				}
 			}
 			while (node = next)
@@ -63,25 +59,21 @@ var Szentiras = (function() {
 		var a = d.createElement('a');
 		a.className += ' ige-link';
 		a.appendChild(d.createTextNode(hivatkozas[0]));
-		a.addEventListener("mouseover", function(event) {
+		a.onmouseover = function(event) {
 			// ha rámutatunk egy hivatkozásra, akkor új tooltipet jelenítünk meg
 			clearTimeout(linkTimeout);
 			clearTimeout(tipTimeout);
-			tooltip && (tooltip.parentNode.removeChild(tooltip), tooltip = null);
-			linkTimeout = setTimeout(function() {
-				showTooltip(event);
-			}, config.tipShow);
-		}, false);
-		a.addEventListener("mouseout", function() {
+			hideTooltip();
+			linkTimeout = setTimeout(function() { showTooltip(event); }, config.tipShow);
+		};
+		a.onmouseout = function() {
 			// ha elvisszük az egeret a hivatkozásról, akkor elrejtjük a tooltipet
-			linkTimeout && (clearTimeout(linkTimeout), linkTimeout = null);
+			clearTimeout(linkTimeout);
 			if (tooltip) {
 				clearTimeout(tipTimeout);
-				tipTimeout = setTimeout(function() {
-					tooltip && (tooltip.parentNode.removeChild(tooltip), tooltip = null);
-				}, config.tipHide);
+				tipTimeout = setTimeout(function() { hideTooltip(); }, config.tipHide);
 			}
-		});
+		};
 		return a;
 	}
 
@@ -90,12 +82,10 @@ var Szentiras = (function() {
 		var xhr = new XMLHttpRequest();
 		if ("withCredentials" in xhr) {
 			xhr.open(method, url, true);
-
 		}
 		else if (typeof XDomainRequest != "undefined") {
 			xhr = new XDomainRequest();
 			xhr.open(method, url);
-
 		}
 		else {
 			xhr = null;
@@ -127,7 +117,12 @@ var Szentiras = (function() {
 	}
 
 	function showTooltip(event) {
-		var a = event.target || event.srcElement, offsetTop, offsetLeft, triggerH, screenW, r = a.getBoundingClientRect();
+		var a = event.target || event.srcElement,
+		r = a.getBoundingClientRect(),
+		offsetTop = r.top + (e.scrollTop || b.scrollTop),
+		offsetLeft = r.left + (e.scrollLeft || b.scrollLeft),
+		screenW = b.clientWidth || window.innerWidth,
+		triggerH = a.offsetHeight;
 		
 		ajax(a);
 		
@@ -136,26 +131,17 @@ var Szentiras = (function() {
 				igehely = d.createElement('div'), igehely.className += 'igehely', tooltip.appendChild(igehely)
 		);
 
-		igehely.innerHTML = '&nbsp;<a href="' + olvasas + config.forditas + '/' + encodeURI(a.textContent.replace(/\s/g, "")) + '"><b>'+ a.textContent + '</b>&nbsp;(szentiras.hu)&nbsp;&raquo;</a>';
+		igehely.innerHTML = '&nbsp;<a href="' + url + config.forditas + '/' + encodeURI(a.textContent.replace(/\s/g, "")) + '"><b>'+ a.textContent + '</b>&nbsp;(szentiras.hu)&nbsp;&raquo;</a>';
 		szoveg.textContent = "Betöltés...";
 		
 		tooltip.id = "igemutato";
-		tooltip.addEventListener("mouseover", function() {
-			// amíg a tooltipen van az egér, addig marad megjelenítve
+		// amíg a tooltipen van az egér, addig marad megjelenítve
+		tooltip.onmouseover = function() { clearTimeout(tipTimeout); };
+		// ha elvisszük róla az egeret, akkor elrejtjük
+		tooltip.onmouseout = function() {
 			clearTimeout(tipTimeout);
-		}, false);
-		tooltip.addEventListener("mouseout", function() {
-			// ha elvisszük róla az egeret, akkor elrejtjük
-			clearTimeout(tipTimeout);
-			tipTimeout = setTimeout(function() {
-				tooltip && (tooltip.parentNode.removeChild(tooltip), tooltip = null);
-			}, config.tipHide);
-		});
-		
-		offsetTop = r.top + (e.scrollTop || b.scrollTop);
-		offsetLeft = r.left + (e.scrollLeft || b.scrollLeft);
-		triggerH = a.offsetHeight;
-		screenW = b.clientWidth || window.innerWidth;
+			tipTimeout = setTimeout(function() { hideTooltip(); }, config.tipHide);
+		};
 
 		// ha a tooltip nem lóg ki az ablak tetején, akkor az elem fölé kerül,
 		// egyébként alá
@@ -168,6 +154,10 @@ var Szentiras = (function() {
 		szoveg.style.height = (config.tipH - 30) + "px";
 
 		b.appendChild(tooltip);
+	}
+	
+	function hideTooltip(){
+		tooltip && (tooltip.parentNode.removeChild(tooltip), tooltip = null);
 	}
 	
 	function setConfig(options){

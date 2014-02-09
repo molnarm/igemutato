@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Igemutató",
 	"description": "Bibliai hivatkozások beillesztése a Szentírás.hu oldalról",
-	"version": "0.2",
+	"version": "0.3",
 	"permissions": [
 		"storage",
 	    "http://szentiras.hu/"

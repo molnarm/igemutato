@@ -1,6 +1,5 @@
 function save_options() {
 	var config = {
-		// TODO parseInt hibakezelés
 		forditas : document.getElementById("forditas").value,
 		tipH : parseInt(document.getElementById("tipH").value),
 		tipW : parseInt(document.getElementById("tipW").value),

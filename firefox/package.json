@@ -5,7 +5,7 @@
 	"description": "Bibliai hivatkozások beillesztése a Szentírás.hu oldalról",
 	"author": "Molnár Márton",
 	"license": "MPL 2.0",
-	"version": "0.1",
+	"version": "0.3",
 	"permissions": {
 		"cross-domain-content": ["http://szentiras.hu/"]
 	},

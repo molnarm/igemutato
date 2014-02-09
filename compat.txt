@@ -1,0 +1,20 @@
+Csak IE10+
+- XMLHttpRequest 2 (onreadystatechange helyett onload, onerror)
+
+Csak IE9+
+- addEventListener
+
+Csak IE8+
+
+- Array.prototype.indexOf
+- window.innerWidth
+- XDomainRequest (de 10+ nem érdemes használni)
+
+http://rankings.hu/hu/rankings/web-browsers.html 2014.02.09.
+Firefox		37,33%
+Chrome		37,05%
+IE			11,40%
+	IE8		 3,53% <--
+	IE9		 1,83%
+	IE10	 1,37%
+	IE11	 4,52%
