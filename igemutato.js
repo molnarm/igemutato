@@ -78,14 +78,14 @@ var Szentiras = (function() {
 	}
 
 	// http://www.html5rocks.com/en/tutorials/cors/
-	function createCORSRequest(method, url) {
+	function createCORSRequest(method, target) {
 		var xhr = new XMLHttpRequest();
 		if ("withCredentials" in xhr) {
-			xhr.open(method, url, true);
+			xhr.open(method, target, true);
 		}
 		else if (typeof XDomainRequest != "undefined") {
 			xhr = new XDomainRequest();
-			xhr.open(method, url);
+			xhr.open(method, target);
 		}
 		else {
 			xhr = null;
