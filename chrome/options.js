@@ -21,7 +21,7 @@ function save_options() {
 	});
 }
 
-function validate_options(options) {
+function validate_options(data) {
 	var defaults = {
 		forditas : 'SZIT',
 		tipW : 300,
@@ -31,6 +31,7 @@ function validate_options(options) {
 		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a"
 	};
 
+	var options = data || {};
 	var tipW = parseInt(options.tipW),
 	tipH = parseInt(options.tipH),
 	tipShow = parseInt(options.tipShow),
@@ -42,6 +43,7 @@ function validate_options(options) {
 	options.tipShow = (isNaN(tipShow) || tipShow < 0) ? defaults.tipShow : tipShow;
 	options.tipHide = (isNaN(tipHide) || tipHide < 0) ? defaults.tipHide : tipHide;
 	options.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF' ].indexOf(forditas) == -1) ? defaults.forditas : forditas;
+	options.excludeTags = options.excludeTags || defaults.excludeTags;
 
 	return options;
 }

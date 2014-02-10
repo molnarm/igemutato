@@ -1,6 +1,6 @@
 .ige-link, .ige-link:hover{
 	border-bottom: 1px dotted #660420;
-	color: #660420;
+	color: #660420!important;
 	text-decoration:none;
 }
 #igemutato, #igemutato .igehely a, #igemutato .igehely a:hover{	
@@ -17,16 +17,14 @@
 	box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 #igemutato .szoveg{
-	text-align: justify;
 	padding: 5px;
+	text-align: justify;
 	overflow: auto;
 }
 #igemutato .igehely{
-	background: white;
-	position: absolute;
-	border-top: 1px solid black;
 	width: 100%;
-	bottom: 0;
-	height:20px;
+	height:19px;
 	text-align: left;
+	background: white;
+	border-top: 1px solid black;
 }

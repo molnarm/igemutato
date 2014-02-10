@@ -21,8 +21,16 @@ var Szentiras = (function() {
 	// API URL
 	url ='http://szentiras.hu/',
 	api = url + 'API/?feladat=idezet&hivatkozas=',
-	
-	tooltip, szoveg, igehely, linkTimeout, tipTimeout, xmlhttp, d = document, e = d.documentElement, b = d.body, excludes;
+	// tooltip elemei
+	tooltip, szoveg, igehely,
+	// timeoutok
+	linkTimeout, tipTimeout,
+	// lekérdezések kellékei
+	xmlhttp, cache = {},
+	// DOM elemek
+	d = document, e = d.documentElement, b = d.body,
+	// kizárt elemek
+	excludes;
 	
 	function keres(node) {
 		var match, next, parent, replacementNode, text;
@@ -93,10 +101,15 @@ var Szentiras = (function() {
 		return xhr;
 	}
 
-	function ajax(link) {
+	function ajax(ige) {
 		xmlhttp && xmlhttp.abort();
-		xmlhttp = createCORSRequest('GET', api + encodeURI(link.textContent) + '&forditas=' + config.forditas);
-
+		
+		if(cache[ige]){
+			szoveg.textContent = cache[ige];
+			return;
+		}
+		
+		xmlhttp = createCORSRequest('GET', api + ige + '&forditas=' + config.forditas);
 		xmlhttp.onreadystatechange = function() {
 			if (!tooltip)
 				return;
@@ -106,6 +119,7 @@ var Szentiras = (function() {
 					for ( var i = 0; i < json.valasz.versek.length; i++)
 						result += json.valasz.versek[i].szoveg + ' ';
 					szoveg.textContent = result;
+					cache[ige] = result;
 				}
 				else {
 					szoveg.textContent = 'A betöltés sikertelen :-(';
@@ -118,21 +132,26 @@ var Szentiras = (function() {
 
 	function showTooltip(event) {
 		var a = event.target || event.srcElement,
+		hivatkozas = a.textContent,
+		hivatkozasUrl = encodeURI(hivatkozas.replace(/\s/g, "")),
+		href = url + config.forditas + '/' + hivatkozasUrl,
 		r = a.getBoundingClientRect(),
 		offsetTop = r.top + (e.scrollTop || b.scrollTop),
 		offsetLeft = r.left + (e.scrollLeft || b.scrollLeft),
 		screenW = b.clientWidth || window.innerWidth,
 		triggerH = a.offsetHeight;
-		
-		ajax(a);
+
+		a.href = href;
 		
 		tooltip || (tooltip = d.createElement('div'),
 				szoveg = d.createElement('div'), szoveg.className += 'szoveg', tooltip.appendChild(szoveg),
 				igehely = d.createElement('div'), igehely.className += 'igehely', tooltip.appendChild(igehely)
 		);
 
-		igehely.innerHTML = '&nbsp;<a href="' + url + config.forditas + '/' + encodeURI(a.textContent.replace(/\s/g, "")) + '"><b>'+ a.textContent + '</b>&nbsp;(szentiras.hu)&nbsp;&raquo;</a>';
+		igehely.innerHTML = '&nbsp;<a href="' + href + '"><b>'+ hivatkozas + '</b>&nbsp;(szentiras.hu)&nbsp;&raquo;</a>';
 		szoveg.textContent = "Betöltés...";
+
+		ajax(hivatkozasUrl);
 		
 		tooltip.id = "igemutato";
 		// amíg a tooltipen van az egér, addig marad megjelenítve
@@ -143,8 +162,7 @@ var Szentiras = (function() {
 			tipTimeout = setTimeout(function() { hideTooltip(); }, config.tipHide);
 		};
 
-		// ha a tooltip nem lóg ki az ablak tetején, akkor az elem fölé kerül,
-		// egyébként alá
+		// ha a tooltip nem lóg ki az ablak tetején, akkor az elem fölé kerül, egyébként alá
 		tooltip.style.top = ((r.top > config.tipH + config.tipD) ? (offsetTop - config.tipH - config.tipD) : (offsetTop + triggerH + config.tipD)) + "px";
 		// ha a tooltip kilógna jobb oldalt, akkor úgy helyezzük el, hogy még
 		// pont elférjen, egyébként az elem fölé
