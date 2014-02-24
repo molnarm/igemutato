@@ -17,12 +17,12 @@ var Szentiras = (function() {
 		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a"
 	},
 	
-	regexp = /([12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))(?: ?[0-9]+)(?:[;,.\- ]*[0-9]+[a-z]?)*/g,
+	regexp = /([12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)?Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))[\.:]?\s*(?:[0-9]{1,3}(?:(?:[,:]\s*[0-9]{1,2}[a-f]?(?:(?:(?:-[0-9]{1,2}[a-f]?)?(?:\.[0-9]{1,2}[a-f]?(?:-[0-9]{1,2}[a-f]?)?)*)|(?:-[0-9]{1,3}[,:]\s*[0-9]{1,2}[a-f]?)))|(?:-[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?)?);\s*(?:[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?(?:(?:(?:-[0-9]{1,2}[a-f]?)?(?:\.[0-9]{1,2}[a-f]?(?:-[0-9]{1,2}[a-f]?)?)*)|(?:-[0-9]{1,3}[,:]\s*[0-9]{1,2}[a-f]?)))|(?:-[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?)?))*)?)/g
 	// API URL
 	url ='http://szentiras.hu/',
-	api = url + 'API/?feladat=idezet&hivatkozas=',
+	api = url + 'API/?feladat=idezet&hivatkozas=';
 	// tooltip elemei
-	tooltip, szoveg, igehely,
+	var tooltip, szoveg, igehely,
 	// timeoutok
 	linkTimeout, tipTimeout,
 	// lekérdezések kellékei
@@ -148,7 +148,7 @@ var Szentiras = (function() {
 				igehely = d.createElement('div'), igehely.className += 'igehely', tooltip.appendChild(igehely)
 		);
 
-		igehely.innerHTML = '&nbsp;<a href="' + href + '"><b>'+ hivatkozas + '</b>&nbsp;(szentiras.hu)&nbsp;&raquo;</a>';
+		igehely.innerHTML = '&nbsp;<a href="' + href + '"><b>'+ hivatkozas + '</b><span style="float:right">szentiras.hu&nbsp;&raquo;&nbsp;</span></a>';
 		szoveg.textContent = "Betöltés...";
 
 		ajax(hivatkozasUrl);
@@ -164,8 +164,7 @@ var Szentiras = (function() {
 
 		// ha a tooltip nem lóg ki az ablak tetején, akkor az elem fölé kerül, egyébként alá
 		tooltip.style.top = ((r.top > config.tipH + config.tipD) ? (offsetTop - config.tipH - config.tipD) : (offsetTop + triggerH + config.tipD)) + "px";
-		// ha a tooltip kilógna jobb oldalt, akkor úgy helyezzük el, hogy még
-		// pont elférjen, egyébként az elem fölé
+		// ha a tooltip kilógna jobb oldalt, akkor úgy helyezzük el, hogy még pont elférjen, egyébként az elem fölé
 		tooltip.style.left = (((offsetLeft + config.tipW) > screenW) ? (screenW - config.tipW - config.tipD) : offsetLeft) + "px";
 		tooltip.style.width = config.tipW + "px";
 		tooltip.style.height = config.tipH + "px";

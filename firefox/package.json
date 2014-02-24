@@ -1,11 +1,11 @@
 {
-	"name": "igemutato",
-	"title": "Igemutató",
+	"name": "szentiras",
+	"title": "Szentírás",
 	"id": "jid1-miv3JfAbewMzFw",
 	"description": "Bibliai hivatkozások beillesztése a Szentírás.hu oldalról",
 	"author": "Molnár Márton",
-	"license": "MPL 2.0",
-	"version": "0.3",
+	"version": "0.5",
+	"icon64" : "data\\icon64.png",
 	"permissions": {
 		"cross-domain-content": ["http://szentiras.hu/"]
 	},
