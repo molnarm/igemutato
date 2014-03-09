@@ -15,7 +15,7 @@
 	        "title": "Fordítás",
 	        "description": "Ezt a fordítást használja az igék megjelenítéséhez",
 	        "type": "menulist",
-	        "value": "SZIT",
+	        "value": "KNB",
 	        "options": [
 		        {
 		            "value": "KNB",

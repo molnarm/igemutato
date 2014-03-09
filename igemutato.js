@@ -105,7 +105,7 @@ var Szentiras = (function() {
 		xmlhttp && xmlhttp.abort();
 		
 		if(cache[ige]){
-			szoveg.textContent = cache[ige];
+			szoveg.innerHTML = cache[ige];
 			return;
 		}
 		
@@ -118,7 +118,7 @@ var Szentiras = (function() {
 				if (json && json.valasz && json.valasz.versek && json.valasz.versek.length) {
 					for ( var i = 0; i < json.valasz.versek.length; i++)
 						result += json.valasz.versek[i].szoveg + ' ';
-					szoveg.textContent = result;
+					szoveg.innerHTML = result;
 					cache[ige] = result;
 				}
 				else {
