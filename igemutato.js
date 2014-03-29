@@ -105,7 +105,7 @@ var Szentiras = (function() {
 		xmlhttp && xmlhttp.abort();
 		
 		if(cache[ige]){
-			szoveg.innerHTML = cache[ige];
+			addContent(cache[ige]);
 			return;
 		}
 		
@@ -114,20 +114,52 @@ var Szentiras = (function() {
 			if (!tooltip)
 				return;
 			if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-				var json = JSON.parse(xmlhttp.responseText), result = '';
-				if (json && json.valasz && json.valasz.versek && json.valasz.versek.length) {
-					for ( var i = 0; i < json.valasz.versek.length; i++)
-						result += json.valasz.versek[i].szoveg + ' ';
-					szoveg.innerHTML = result;
-					cache[ige] = result;
+				try{
+					var json = JSON.parse(xmlhttp.responseText);
+					if (json && json.valasz && json.valasz.versek && json.valasz.versek.length) {
+						addContent(json.valasz.versek);
+						cache[ige] = json.valasz.versek;
+						return;
+					}
 				}
-				else {
-					szoveg.textContent = 'A betöltés sikertelen :-(';
-				}
+				catch(ex){}
+				szoveg.textContent = 'A betöltés sikertelen :-(';
 			}
 		};
 
 		xmlhttp.send();
+	}
+	
+	function addContent(versek) {
+		var domParser = new DOMParser(), i, html;	// IE10+
+				
+		while(szoveg.firstChild){ szoveg.removeChild(szoveg.firstChild); }
+		for(i = 0; i < versek.length; i++){
+			html = domParser.parseFromString(versek[i].szoveg, 'text/html');
+			if(html.body && html.body.firstChild && html.body.firstChild.nodeName != "parserError"){
+				addElements(szoveg, html.body.childNodes);
+			}
+		}
+	}
+	
+	function addElements(root, nodes){
+		var whitelist = /br|i|em|u|b|strong|center/i, node, next;
+				
+		node = nodes[0];
+		do{
+			next = node.nextSibling;
+			if(node.nodeType == 3){
+				node.textContent += ' ';
+				root.appendChild(node);
+			}
+			else if(whitelist.test(node.nodeName)) {
+				if(node.childNodes.length >0){
+					addElements(node, node.childNodes);
+				}
+				root.appendChild(node);
+			}
+		}
+		while(node = next);
 	}
 
 	function showTooltip(event) {
@@ -148,7 +180,17 @@ var Szentiras = (function() {
 				igehely = d.createElement('div'), igehely.className += 'igehely', tooltip.appendChild(igehely)
 		);
 
-		igehely.innerHTML = '&nbsp;<a href="' + href + '"><b>'+ hivatkozas + '</b><span style="float:right">szentiras.hu&nbsp;&raquo;&nbsp;</span></a>';
+		var link = d.createElement("a"), ref = d.createElement("b"), span = d.createElement("span");
+		link.href = href;
+		ref.textContent = hivatkozas;
+		span.style.cssFloat = "right";
+		span.textContent = "szentiras.hu »";
+		link.appendChild(ref);
+		link.appendChild(span);
+		 
+		igehely.firstChild && igehely.removeChild(igehely.firstChild);
+		igehely.appendChild(link);
+		
 		szoveg.textContent = "Betöltés...";
 
 		ajax(hivatkozasUrl);

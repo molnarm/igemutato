@@ -3,7 +3,9 @@
 	color: #660420!important;
 	text-decoration:none;
 }
-#igemutato, #igemutato .igehely a, #igemutato .igehely a:hover{	
+#igemutato,
+#igemutato .igehely a,
+#igemutato .igehely a:hover{	
 	background: white;
 	font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
 	font-size: 13px;
@@ -18,7 +20,7 @@
 }
 #igemutato .szoveg{
 	padding: 5px;
-	text-align: justify;
+	text-align: left;
 	overflow: auto;
 }
 #igemutato .igehely{
@@ -27,4 +29,8 @@
 	text-align: left;
 	background: white;
 	border-top: 1px solid black;
+}
+.igehely a,
+.igehely span{
+	margin: 0 10px;
 }
