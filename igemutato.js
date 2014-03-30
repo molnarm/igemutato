@@ -7,6 +7,8 @@ var Szentiras = (function() {
 		tipW : 300,
 		// tooltip magasság
 		tipH : 200,
+		// betűméret,
+		fontSize: 13,
 		// tooltip távolsága a szövegtől / képenyő szélétől
 		tipD : 5,
 		// tooltip megjelenítési késleltetés
@@ -17,12 +19,12 @@ var Szentiras = (function() {
 		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a"
 	},
 	
-	regexp = /([12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)?Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))[\.:]?\s*(?:[0-9]{1,3}(?:(?:(?:[,:]\s*[0-9]{1,2}[a-f]?(?:(?:(?:-[0-9]{1,2}[a-f]?)?(?:\.[0-9]{1,2}[a-f]?(?:-[0-9]{1,2}[a-f]?)?)*)|(?:-[0-9]{1,3}[,:]\s*[0-9]{1,2}[a-f]?)))|(?:-[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?)?))(?:;\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?(?:(?:(?:-[0-9]{1,2}[a-f]?)?(?:\.[0-9]{1,2}[a-f]?(?:-[0-9]{1,2}[a-f]?)?)*)|(?:-[0-9]{1,3}[,:]\s*[0-9]{1,2}[a-f]?)))|(?:-[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?)?))*)?)/g
+	regexp = /([12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)?Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))[\.:]?\s*(?:[0-9]{1,3}(?:(?:(?:[,:]\s*[0-9]{1,2}[a-f]?(?:(?:(?:-[0-9]{1,2}[a-f]?)?(?:\.\s*[0-9]{1,2}[a-f]?(?:-[0-9]{1,2}[a-f]?)?)*)|(?:-[0-9]{1,3}[,:]\s*[0-9]{1,2}[a-f]?)))|(?:-[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?)?))(?:;\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?(?:(?:(?:-[0-9]{1,2}[a-f]?)?(?:\.\s*[0-9]{1,2}[a-f]?(?:-[0-9]{1,2}[a-f]?)?)*)|(?:-[0-9]{1,3}[,:]\s*[0-9]{1,2}[a-f]?)))|(?:-[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?)?))*)?)/g,
 	// API URL
 	url ='http://szentiras.hu/',
-	api = url + 'API/?feladat=idezet&hivatkozas=';
+	api = url + 'API/?feladat=idezet&hivatkozas=',
 	// tooltip elemei
-	var tooltip, szoveg, igehely,
+	tooltip, szoveg, igehely,
 	// timeoutok
 	linkTimeout, tipTimeout,
 	// lekérdezések kellékei
@@ -210,6 +212,7 @@ var Szentiras = (function() {
 		tooltip.style.left = (((offsetLeft + config.tipW) > screenW) ? (screenW - config.tipW - config.tipD) : offsetLeft) + "px";
 		tooltip.style.width = config.tipW + "px";
 		tooltip.style.height = config.tipH + "px";
+		szoveg.style.fontSize = config.fontSize + "px";
 		szoveg.style.height = (config.tipH - 30) + "px";
 
 		b.appendChild(tooltip);
