@@ -19,7 +19,7 @@ var Szentiras = (function() {
 		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a"
 	},
 	
-	regexp = /([12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)?Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))[\.:]?\s*(?:[0-9]{1,3}(?:(?:(?:[,:]\s*[0-9]{1,2}[a-f]?(?:(?:(?:-[0-9]{1,2}[a-f]?)?(?:\.\s*[0-9]{1,2}[a-f]?(?:-[0-9]{1,2}[a-f]?)?)*)|(?:-[0-9]{1,3}[,:]\s*[0-9]{1,2}[a-f]?)))|(?:-[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?)?))(?:;\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?(?:(?:(?:-[0-9]{1,2}[a-f]?)?(?:\.\s*[0-9]{1,2}[a-f]?(?:-[0-9]{1,2}[a-f]?)?)*)|(?:-[0-9]{1,3}[,:]\s*[0-9]{1,2}[a-f]?)))|(?:-[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-f]?)?))*)?)/g,
+	regexp = /(?:[12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)?Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))\.?(?:\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*-\s*[0-9]{1,2}[a-z]?\b(?!,))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*-\s*[0-9]{1,2}[a-z]?\b(?!,))?)*)?(?:-\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*-\s*[0-9]{1,2}[a-z]?\b(?!,))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*-\s*[0-9]{1,2}[a-z]?\b(?!,))?)*)?)?(?:\|\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*-\s*[0-9]{1,2}[a-z]?\b(?!,))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*-\s*[0-9]{1,2}[a-z]?\b(?!,))?)*)?(?:-\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*-\s*[0-9]{1,2}[a-z]?\b(?!,))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*-\s*[0-9]{1,2}[a-z]?\b(?!,))?)*)?)?)*)/g,
 	// API URL
 	url ='http://szentiras.hu/',
 	api = url + 'API/?feladat=idezet&hivatkozas=',
@@ -118,10 +118,18 @@ var Szentiras = (function() {
 			if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 				try{
 					var json = JSON.parse(xmlhttp.responseText);
-					if (json && json.valasz && json.valasz.versek && json.valasz.versek.length) {
-						addContent(json.valasz.versek);
-						cache[ige] = json.valasz.versek;
-						return;
+					if(json && json.error){
+						szoveg.textContent = json.error;						
+					}
+					else if(json && json.valasz){
+						if(json.valasz.hiba){
+							szoveg.textContent = json.valasz.hiba;
+						}
+						else if(json.valasz.versek && json.valasz.versek.length) {
+							addContent(json.valasz.versek);
+							cache[ige] = json.valasz.versek;
+							return;
+						}
 					}
 				}
 				catch(ex){}
@@ -182,13 +190,10 @@ var Szentiras = (function() {
 				igehely = d.createElement('div'), igehely.className += 'igehely', tooltip.appendChild(igehely)
 		);
 
-		var link = d.createElement("a"), ref = d.createElement("b"), span = d.createElement("span");
+		var link = d.createElement("a"), ref = d.createElement("b");
 		link.href = href;
-		ref.textContent = hivatkozas;
-		span.style.cssFloat = "right";
-		span.textContent = "szentiras.hu »";
+		ref.textContent = hivatkozas + ' (' + config.forditas + ')';
 		link.appendChild(ref);
-		link.appendChild(span);
 		 
 		igehely.firstChild && igehely.removeChild(igehely.firstChild);
 		igehely.appendChild(link);
@@ -213,7 +218,7 @@ var Szentiras = (function() {
 		tooltip.style.width = config.tipW + "px";
 		tooltip.style.height = config.tipH + "px";
 		szoveg.style.fontSize = config.fontSize + "px";
-		szoveg.style.height = (config.tipH - 30) + "px";
+		szoveg.style.height = (config.tipH - 21) + "px";
 
 		b.appendChild(tooltip);
 	}
