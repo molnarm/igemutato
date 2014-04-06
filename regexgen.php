@@ -5,6 +5,7 @@
  *  - Egész könyves hivatkozást nem fogad el (egy egész könyvet nem lenne túl kényelmes tooltipben olvasni,
  *  	és túl sok hamis pozitívot is eredményezne (Ez, Ének, Zsolt, Ám, Bár stb...)). Ha mégis ezt szeretnénk, kell a végére egy ? és kész.
  *  - a pontosvesszővel elválasztott önálló hivatkozásokat egyenként ismeri fel, nem egyben
+ *  - cserébe | helyett ;-t is elfogad fejezet-elválasztónak
  *  
  *  Ellenőrzéshez: http://regexpal.com/
  */
@@ -22,8 +23,8 @@ $verseRange = "{$verseId}(?:{$space}-{$space}{$verseId}\b(?!,))?";
 
 $verseReference = "{$verseRange}(?:\.{$space}{$verseRange})*";
 $chapterReference = "{$chapterId}(?:[,:]{$space}{$verseReference})?";
-$chapterRange = "{$chapterReference}(?:-{$space}{$chapterReference})?";
-$bookReference = "{$chapterRange}(?:\|{$space}{$chapterRange})*";
+$chapterRange = "{$chapterReference}(?:{$space}-{$space}{$chapterReference})?";
+$bookReference = "{$chapterRange}(?:{$space}[\|;]{$space}{$chapterRange})*";
 
 $regex = "{$books}\.?(?:{$space}{$bookReference})";
 

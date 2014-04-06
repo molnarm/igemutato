@@ -107,12 +107,10 @@ var Szentiras = (function() {
 		xmlhttp && xmlhttp.abort();
 		
 		if(cache[ige]){
-// #if FIREFOX
-			addContent(cache[ige]);
-// #endif FIREFOX
-// #if !FIREFOX
+
+
 			szoveg.innerHTML = cache[ige];
-// #endif !FIREFOX
+
 			return;
 		}
 		
@@ -131,17 +129,14 @@ var Szentiras = (function() {
 							szoveg.textContent = json.valasz.hiba;
 						}
 						else if(json.valasz.versek && json.valasz.versek.length) {
-// #if FIREFOX
-							addContent(json.valasz.versek);
-							cache[ige] = json.valasz.versek;
-// #endif FIREFOX
-// #if !FIREFOX
+
+
 							var result = '';
 							for ( var i = 0; i < json.valasz.versek.length; i++)
 								result += json.valasz.versek[i].szoveg + ' ';
 							szoveg.innerHTML = result;
 							cache[ige] = result;
-// #endif !FIREFOX
+
 							return;
 						}
 					}
@@ -154,39 +149,7 @@ var Szentiras = (function() {
 		xmlhttp.send();
 	}
 	
-// #if FIREFOX
-	function addContent(versek) {
-		var domParser = new DOMParser(), i, html;	// IE10+
-				
-		while(szoveg.firstChild){ szoveg.removeChild(szoveg.firstChild); }
-		for(i = 0; i < versek.length; i++){
-			html = domParser.parseFromString(versek[i].szoveg, 'text/html');
-			if(html.body && html.body.firstChild && html.body.firstChild.nodeName != "parserError"){
-				addElements(szoveg, html.body.childNodes);
-			}
-		}
-	}
-	
-	function addElements(root, nodes){
-		var whitelist = /br|i|em|u|b|strong|center/i, node, next;
-				
-		node = nodes[0];
-		do{
-			next = node.nextSibling;
-			if(node.nodeType == 3){
-				node.textContent += ' ';
-				root.appendChild(node);
-			}
-			else if(whitelist.test(node.nodeName)) {
-				if(node.childNodes.length >0){
-					addElements(node, node.childNodes);
-				}
-				root.appendChild(node);
-			}
-		}
-		while(node = next);
-	}
-// #endif FIREFOX
+
 
 	function showTooltip(event) {
 		var a = event.target || event.srcElement,
@@ -206,18 +169,10 @@ var Szentiras = (function() {
 				igehely = d.createElement('div'), igehely.className += 'igehely', tooltip.appendChild(igehely)
 		);
 
-// #if FIREFOX
-		var link = d.createElement("a"), ref = d.createElement("b");
-		link.href = href;
-		ref.textContent = hivatkozas + ' (' + config.forditas + ')';
-		link.appendChild(ref);
-		 
-		igehely.firstChild && igehely.removeChild(igehely.firstChild);
-		igehely.appendChild(link);
-// #endif FIREFOX
-// #if !FIREFOX
+
+
 		igehely.innerHTML = '<a href="' + href + '"><b>' + hivatkozas + ' (' + config.forditas + ')' + '</b></a>';
-// #endif !FIREFOX
+
 		
 		szoveg.textContent = "Betöltés...";
 
@@ -259,3 +214,4 @@ var Szentiras = (function() {
 		keres : keres
 	};
 })();
+

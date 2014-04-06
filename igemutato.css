@@ -21,10 +21,13 @@
 	padding: 5px;
 	text-align: justify;
 	overflow: auto;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
 }
 #igemutato .igehely{
 	width: 100%;
 	height:19px;
+	font-size:13px;
 	text-align: left;
 	background: white;
 	border-top: 1px solid black;
