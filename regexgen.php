@@ -19,11 +19,11 @@ $verseId = '[0-9]{1,2}[a-z]?';
 $chapterId = '[0-9]{1,3}';
 
 // ez itt trükkös, a több fejezet közötti hivatkozás (pl. Mk 1,2-3,4) elejét nem szabad rögtön felismerni verseRange-ként, mert ez majd egy chapterRange lesz!
-$verseRange = "{$verseId}(?:{$space}-{$space}{$verseId}\b(?![,:]))?";
+$verseRange = "{$verseId}(?:{$space}[-–—]{$space}{$verseId}\b(?![,:]))?";
 
 $verseReference = "{$verseRange}(?:\.{$space}{$verseRange})*";
 $chapterReference = "{$chapterId}(?:[,:]{$space}{$verseReference})?";
-$chapterRange = "{$chapterReference}(?:{$space}-{$space}{$chapterReference})?";
+$chapterRange = "{$chapterReference}(?:{$space}[-–—]{$space}{$chapterReference})?";
 $bookReference = "{$chapterRange}(?:{$space}[\|;]{$space}{$chapterRange})*";
 
 $regex = "\b{$books}\.?(?:{$space}{$bookReference})\b";
