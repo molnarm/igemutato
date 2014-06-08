@@ -30,5 +30,3 @@ A build folyamat egyelőre Windowsos eszközökkel van összeállítva (cmd, Pow
     // #endif FELTÉTEL  
 
 Feltételt lehet negálni is, `!FELTÉTEL` formában.
-
-Igazából egyelőre csak pluginként használható a szkript, mivel a szentiras.hu oldalon még nincs CORS támogatás (JSON-P van, esetleg majd a beágyazható változatban (`EMBEDDED`) addig is meg lehetne valósítani azzal a lekérdezést).
