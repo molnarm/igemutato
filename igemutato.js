@@ -28,12 +28,13 @@ var Szentiras = (function() {
 	// timeoutok
 	linkTimeout, tipTimeout,
 	// lekérdezések kellékei
-	xmlhttp, cache = {},
+	xmlhttp, jsonp, cache = {},
 	// DOM elemek
 	d = document, e = d.documentElement, b = d.body,
 	// kizárt elemek
 	excludes;
 	
+	// Megkeresi a hivatkozásokat az oldalban
 	function keres(node) {
 		var match, next, parent, replacementNode, text;
 		excludes || (excludes = config.excludeTags.split(','));
@@ -65,6 +66,7 @@ var Szentiras = (function() {
 			while (node = next)
 	}
 
+	// A hivatkozásokat linkekre cseréli
 	function csere(hivatkozas) {
 		var a = d.createElement('a');
 		a.className += ' ige-link';
@@ -86,7 +88,9 @@ var Szentiras = (function() {
 		};
 		return a;
 	}
-
+	
+// #if !EMBEDDED
+	// a beágyazott verzió JSONP-t használ
 	// http://www.html5rocks.com/en/tutorials/cors/
 	function createCORSRequest(method, target) {
 		var xhr = new XMLHttpRequest();
@@ -102,9 +106,13 @@ var Szentiras = (function() {
 		}
 		return xhr;
 	}
+// #endif !EMBEDDED
 
-	function ajax(ige) {
+	// Betölti a hivatkozott szöveget
+	function fetch(ige) {	
+// #if !EMBEDDED
 		xmlhttp && xmlhttp.abort();
+// #endif !EMBEDDED
 		
 		if(cache[ige]){
 // #if FIREFOX
@@ -115,7 +123,15 @@ var Szentiras = (function() {
 // #endif !FIREFOX
 			return;
 		}
-		
+	
+// #if EMBEDDED
+		// a beágyazott verzióban egyelőre JSONP-t használunk
+		jsonp && (b.removeChild(jsonp), jsonp = null);
+		jsonp = d.createElement('script'), b.appendChild(jsonp);
+		jsonp.src = api + ige + '&forditas=' + config.forditas + '&callback=Szentiras.parse';
+// #endif EMBEDDED
+// #if !EMBEDDED
+		// a bővítményekben lehet CORS		
 		xmlhttp = createCORSRequest('GET', api + ige + '&forditas=' + config.forditas);
 		xmlhttp.onreadystatechange = function() {
 			if (!tooltip)
@@ -123,35 +139,58 @@ var Szentiras = (function() {
 			if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 				try{
 					var json = JSON.parse(xmlhttp.responseText);
-					if(json && json.error){
-						szoveg.textContent = json.error;						
-					}
-					else if(json && json.valasz){
-						if(json.valasz.hiba){
-							szoveg.textContent = json.valasz.hiba;
-						}
-						else if(json.valasz.versek && json.valasz.versek.length) {
-// #if FIREFOX
-							addContent(json.valasz.versek);
-							cache[ige] = json.valasz.versek;
-// #endif FIREFOX
-// #if !FIREFOX
-							var result = '';
-							for ( var i = 0; i < json.valasz.versek.length; i++)
-								result += json.valasz.versek[i].szoveg + ' ';
-							szoveg.innerHTML = result;
-							cache[ige] = result;
-// #endif !FIREFOX
-							return;
-						}
-					}
+					show(json, ige);
+					return;
 				}
-				catch(ex){}
-				szoveg.textContent = 'A betöltés sikertelen :-(';
+				catch(ex){
+					console && console.log && console.log(ex.message);
+					szoveg.textContent = 'A betöltés sikertelen :-(';
+				}
 			}
+			// TODO itt az abort-on kívül minden más hiba!
 		};
 
-		xmlhttp.send();
+		xmlhttp.send();		
+// #endif !EMBEDDED
+	}
+	
+	function parse(json){
+		show(json, null);
+	}
+
+	// Feldolgozza a JSON választ
+	function show(json, ige){
+		try{
+			if(json && json.error){
+				szoveg.textContent = json.error;						
+			}
+			else if(json && json.valasz){
+				if(json.valasz.hiba){
+					szoveg.textContent = json.valasz.hiba;
+				}
+				else if(json.valasz.versek && json.valasz.versek.length) {
+// #if FIREFOX
+					addContent(json.valasz.versek);
+					cache[ige] = json.valasz.versek;
+// #endif FIREFOX
+// #if !FIREFOX
+					var result = '';
+					for ( var i = 0; i < json.valasz.versek.length; i++)
+						result += json.valasz.versek[i].szoveg + ' ';
+					szoveg.innerHTML = result;
+// #endif !FIREFOX
+// #if CHROME
+					// EMBEDDED esetben nem tudjuk, mi volt a kérés // TODO
+					cache[ige] = result;
+// #endif CHROME
+					return;
+				}
+			}
+		}
+		catch(ex){
+			console && console.log && console.log(ex.message);
+		}
+		szoveg.textContent = 'A betöltés sikertelen :-(';
 	}
 	
 // #if FIREFOX
@@ -221,7 +260,7 @@ var Szentiras = (function() {
 		
 		szoveg.textContent = "Betöltés...";
 
-		ajax(hivatkozasUrl);
+		fetch(hivatkozasUrl);
 		
 		tooltip.id = "igemutato";
 		// amíg a tooltipen van az egér, addig marad megjelenítve
@@ -254,8 +293,29 @@ var Szentiras = (function() {
 		}
 	}
 
+// #if EMBEDDED
+	function loadCSS(){
+		 var css = d.createElement("link");
+		 css.setAttribute("rel", "stylesheet");
+		 css.setAttribute("type", "text/css");
+		 css.setAttribute("href", 'http://molnarm.github.io/igemutato.min.css');
+		
+		 document.getElementsByTagName("head")[0].appendChild(css);
+	}
+// #endif EMBEDDED
+
 	return {
-		setConfig : setConfig,
-		keres : keres
+		setConfig: setConfig,
+// #if EMBEDDED
+		loadCSS: loadCSS,
+// #endif EMBEDDED
+		keres: keres,
+		parse: parse
 	};
 })();
+
+// #if EMBEDDED
+window.igemutato && window.igemutato.config && Szentiras.setConfig(window.igemutato.config);
+Szentiras.loadCSS();
+Szentiras.keres(document.body);
+// #endif EMBEDDED

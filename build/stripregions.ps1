@@ -5,5 +5,5 @@ param (
  )
  
 [Regex]::Replace([Regex]::Replace((Get-Content $source -Raw),
-'(?sm)// #if ((!' + $condition + ')|(?!' + $condition + ')[A-Z]+).*?// #endif ((!' + $condition + ')|(?!' + $condition + ')[A-Z]+)', ''),
+'(?sm)// #if ((!' + $condition + ')|(?!' + $condition + ')[A-Z]+).*?// #endif \1', ''),
 '// #(end)?if !?[A-Z]+', '') | Set-Content $output
