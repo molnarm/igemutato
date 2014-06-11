@@ -55,4 +55,5 @@
 		</table>
 		<p class="submit"><input type="submit" class="button-primary" value="Mentés" /></p>
 	</form>
+	<p class="description">A bővítmény és a felhasznált szkriptek teljes forráskódja megtalálható a <a href="https://github.com/molnarm/igemutato">https://github.com/molnarm/igemutato</a> oldalon.</p>
 </div>

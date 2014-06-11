@@ -2,7 +2,7 @@
 /*
  Plugin Name: Igemutató
  Description: Felismeri az oldal szövegében a szentírási hivatkozásokat és felugró ablakba megjeleníti az idézett szöveget.
- Version: 2014.06.09.
+ Version: 2014.06.11.
  Author: Molnár Márton
  License: GPL
  */
@@ -16,6 +16,11 @@ class Igemutato {
 	 */
 	const OPTION_NAME = 'igemutato_options';
 	
+	/**
+	 * Handle of JavaScript files
+	 */
+	const SCRIPT_HANDLE = 'igemutato';
+	
 	function __construct() {	
 		// Activation
 		register_activation_hook(__FILE__, array($this, 'activate'));
@@ -23,7 +28,9 @@ class Igemutato {
 		register_deactivation_hook(__FILE__, array($this, 'deactivate'));
 		
 		// Custom JS
-		add_action('wp_footer', array($this, 'wp_footer'));
+		add_action('init', array($this, 'init'));
+		add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+		add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
 		
 		// Admin init
 		add_action('admin_init',array($this,'admin_init'));
@@ -78,21 +85,16 @@ class Igemutato {
 	/**
 	 * Custom JS
 	 */
-	public function wp_footer() {
-		global $post;
-		if(!is_admin() && !empty($post)): ?>
-<script>
-var igemutato = {config: <?php echo json_encode(get_option(Igemutato::OPTION_NAME)); ?> },
-s = document.getElementsByTagName('script')[0],
-e = document.createElement('script');
-e.src = 'http://molnarm.github.io/igemutato.min.js';
-s.parentNode.insertBefore(e, s);
-</script>
-		<?php endif;
-	}
+	public function init(){
+		wp_register_script(Igemutato::SCRIPT_HANDLE, 'http://molnarm.github.io/igemutato.min.js', array(), '', true);
+	}	
+	public function enqueue_scripts(){
+		wp_enqueue_script(Igemutato::SCRIPT_HANDLE);
+		wp_localize_script(Igemutato::SCRIPT_HANDLE, 'igemutato', array('config' => get_option(Igemutato::OPTION_NAME)));
+	}	
 	
 	/**
-	 * Admin JS
+	 * Admin settings
 	 */
 	public function admin_init() {
 		// Add settings
@@ -114,7 +116,7 @@ s.parentNode.insertBefore(e, s);
 	}
 
 	/**
-	 * Save options
+	 * Validate options
 	 */
 	public function validate_options($options) {
 		$defaults = Igemutato::get_default_settings();
