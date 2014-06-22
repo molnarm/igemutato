@@ -7,6 +7,7 @@ function save_options() {
 		tipShow : parseInt(document.getElementById("tipShow").value),
 		tipHide : parseInt(document.getElementById("tipHide").value),
 		excludeTags : document.getElementById("excludeTags").value,
+		enableFormatting : document.getElementById("enableFormatting").checked,
 	};
 
 	chrome.storage.sync.set({
@@ -30,7 +31,8 @@ function validate_options(data) {
 		fontSize : 13,
 		tipShow : 200,
 		tipHide : 500,
-		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a"
+		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a",
+		enableFormatting: true
 	};
 
 	var options = data || {};
@@ -48,6 +50,7 @@ function validate_options(data) {
 	options.tipHide = (isNaN(tipHide) || tipHide < 0) ? defaults.tipHide : tipHide;
 	options.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF' ].indexOf(forditas) == -1) ? defaults.forditas : forditas;
 	options.excludeTags = options.excludeTags || defaults.excludeTags;
+	if(options.enableFormatting === undefined) options.enableFormatting = defaults.enableFormatting;
 
 	return options;
 }
@@ -71,6 +74,7 @@ function restore_options() {
 		document.getElementById("tipShow").value = config.tipShow;
 		document.getElementById("tipHide").value = config.tipHide;
 		document.getElementById("excludeTags").value = config.excludeTags;
+		document.getElementById("enableFormatting").checked = config.enableFormatting;
 	});
 }
 

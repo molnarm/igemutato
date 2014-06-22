@@ -19,7 +19,8 @@ function validateOptions(){
 		tipH : 200,
 		tipShow : 200,
 		tipHide : 500,
-		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a"
+		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a",
+		enableFormatting: true
 	},
 	options = prefs.prefs;
 
@@ -34,4 +35,5 @@ function validateOptions(){
 	prefs.prefs.tipShow = (isNaN(tipShow) || tipShow < 0) ? defaults.tipShow : tipShow;
 	prefs.prefs.tipHide = (isNaN(tipHide) || tipHide < 0) ? defaults.tipHide : tipHide;
 	prefs.prefs.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF' ].indexOf(forditas) == -1) ? defaults.forditas : forditas;
+	if(prefs.prefs.enableFormatting === undefined) prefs.prefs.enableFormatting = defaults.enableFormatting; 
 }

@@ -4,7 +4,7 @@
 	"id": "jid1-miv3JfAbewMzFw",
 	"description": "Bibliai hivatkozások beillesztése a Szentírás.hu oldalról",
 	"author": "Molnár Márton",
-	"version": "0.7.3",
+	"version": "0.8",
 	"icon64" : "data\\icon64.png",
 	"permissions": {
 		"cross-domain-content": ["http://szentiras.hu/"]
@@ -15,7 +15,7 @@
 	        "title": "Fordítás",
 	        "description": "Ezt a fordítást használja az igék megjelenítéséhez",
 	        "type": "menulist",
-	        "value": "KNB",
+	        "value": "SZIT",
 	        "options": [
 		        {
 		            "value": "KNB",
@@ -73,6 +73,13 @@
 	        "description": "Ezekben a HTML elemekben nem jelennek meg hivatkozások",
 	        "type": "string",
 	        "value": "head,script,input,select,textarea,h1,h2,h3,a"
+	    },
+	    {
+	    	"name": "enableFormatting",
+	    	"title": "Szövegformázás engedélyezése",
+	    	"description": "Ha be van kapcsolva, bizonyos szövegrészek formázva jelennek meg",
+	    	"type": "bool",
+	    	"value": true
 	    }
 	]
 }

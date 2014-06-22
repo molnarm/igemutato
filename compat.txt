@@ -1,9 +1,6 @@
 Csak IE10+
 - XMLHttpRequest 2 (onreadystatechange helyett onload, onerror)
 
-Csak IE9+
-- addEventListener
-
 Csak IE8+
 
 - Array.prototype.indexOf

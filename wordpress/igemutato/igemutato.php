@@ -2,7 +2,7 @@
 /*
  Plugin Name: Igemutató
  Description: Felismeri az oldal szövegében a szentírási hivatkozásokat és felugró ablakba megjeleníti az idézett szöveget.
- Version: 2014.06.11.
+ Version: 2014.06.22.
  Author: Molnár Márton
  License: GPL
  */
@@ -28,9 +28,7 @@ class Igemutato {
 		register_deactivation_hook(__FILE__, array($this, 'deactivate'));
 		
 		// Custom JS
-		add_action('init', array($this, 'init'));
-		add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-		add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+ -		add_action('wp_footer', array($this, 'wp_footer'));
 		
 		// Admin init
 		add_action('admin_init',array($this,'admin_init'));
@@ -58,7 +56,9 @@ class Igemutato {
 			// tooltip elrejtési késleltetés
 			'tipHide'  => 500,
 			// kizárt tagek
-			'excludeTags'  => "head,script,input,select,textarea,h1,h2,h3,a"			
+			'excludeTags'  => "head,script,input,select,textarea,h1,h2,h3,a",
+			// szövegformázás
+			'enableFormatting' => true
 		);
 	}
 	
@@ -85,6 +85,20 @@ class Igemutato {
 	/**
 	 * Custom JS
 	 */
+	public function wp_footer() {
+ 		global $post;
+ 		if(!is_admin() && !empty($post)): ?>
+<script>
+var igemutato = {config: <?php echo json_encode(get_option(Igemutato::OPTION_NAME)); ?> },
+s = document.getElementsByTagName('script')[0],
+e = document.createElement('script');
+e.id = 'igemutato-script';
+e.src = 'http://molnarm.github.io/igemutato.min.js';
+s.parentNode.insertBefore(e, s);
+</script>
+ 		<?php endif;
+ 	}
+ 
 	public function init(){
 		wp_register_script(Igemutato::SCRIPT_HANDLE, 'http://molnarm.github.io/igemutato.min.js', array(), '', true);
 	}	
@@ -128,6 +142,7 @@ class Igemutato {
 		$options['tipHide'] = (!is_numeric($options['tipHide']) || $options['tipHide'] < 0) ? $defaults['tipHide'] : $options['tipHide'];
 		$options['forditas'] = (!in_array($options['forditas'], array('SZIT', 'KNB', 'KG', 'UF'))) ? $defaults['forditas'] : $options['forditas'];
 		$options['excludeTags'] = isset($options['excludeTags']) ? $options['excludeTags'] : $defaults['excludeTags'];
+		$options['enableFormatting'] = isset($options['enableFormatting']);
 
 		return $options;
 	}

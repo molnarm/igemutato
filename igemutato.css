@@ -14,7 +14,7 @@
 #igemutato{	
 	position: absolute;
 	z-index: 1000;
-	border: 1px solid black;
+	border-radius: 10px;
 	box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 #igemutato .szoveg{
@@ -29,8 +29,7 @@
 	height:19px;
 	font-size:13px;
 	text-align: left;
-	background: white;
-	border-top: 1px solid black;
+	border-top: 1px solid #ccc;
 }
 .igehely a,
 .igehely span{

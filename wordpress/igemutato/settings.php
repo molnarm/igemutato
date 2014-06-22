@@ -51,6 +51,12 @@
 				<td><input type="text" class="regular-text" id="<?php echo $O."[excludeTags]";?>" name="<?php echo $O."[excludeTags]";?>" value="<?php echo esc_attr($options['excludeTags']);?>"/>
 					<span class="description">Ezekben a HTML elemekben nem jelennek meg hivatkozások</span>
 				</td>
+			</tr>		
+			<tr valign="top">
+				<th scope="row"><label for="<?php echo $O."[enableFormatting]";?>">Szövegformázás engedélyezése</label></th>
+				<td><input type="checkbox" id="<?php echo $O."[enableFormatting]";?>" name="<?php echo $O."[enableFormatting]";?>" <?php checked($options['enableFormatting'], true); ?>"/>
+					<span class="description">Ha be van kapcsolva, bizonyos szövegrészek formázva jelennek meg</span>
+				</td>
 			</tr>
 		</table>
 		<p class="submit"><input type="submit" class="button-primary" value="Mentés" /></p>

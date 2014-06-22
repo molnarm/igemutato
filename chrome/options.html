@@ -16,12 +16,14 @@ tr td:first-child{
 	<table>
 		<tr>
 			<td><label for="forditas">Fordítás:</label></td>
-			<td colspan="2"><select id="forditas">
+			<td colspan="2">
+				<select id="forditas">
 					<option value="KNB">Káldi-Neovulgáta (katolikus)</option>
 					<option value="SZIT" selected="selected">Szent István Társulati Biblia (katolikus)</option>
 					<option value="KG">Károli Gáspár revideált fordítása (protestáns)</option>
 					<option value="UF">Magyar Bibliatársulat újfordítású Bibliája (protestáns)</option>
-			</select></td>
+				</select>
+			</td>
 		</tr>
 		<tr>
 			<td>Felugró ablak méretei (min. 100x50):</td>
@@ -44,6 +46,10 @@ tr td:first-child{
 		<tr>
 			<td><label for="excludeTags">Ezekben az elemekben ne keressen:</label></td>
 			<td colspan="4"><input id="excludeTags" type="text" size="100" /></td>
+		</tr>
+		<tr>
+			<td><label for="enableFormatting">Szövegformázás engedélyezése:</label></td>
+			<td><input id="enableFormatting" type="checkbox" /></td>
 		</tr>
 		<tr>
 			<td><button id="save">Mentés</button></td>
