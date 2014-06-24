@@ -28,7 +28,7 @@ function validate_options(data) {
 		forditas : 'SZIT',
 		tipW : 300,
 		tipH : 200,
-		fontSize : 13,
+		fontSize : 16,
 		tipShow : 200,
 		tipHide : 500,
 		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a",

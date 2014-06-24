@@ -4,7 +4,7 @@
 	"id": "jid1-miv3JfAbewMzFw",
 	"description": "Bibliai hivatkozások beillesztése a Szentírás.hu oldalról",
 	"author": "Molnár Márton",
-	"version": "0.8",
+	"version": "0.8.1",
 	"icon64" : "data\\icon64.png",
 	"permissions": {
 		"cross-domain-content": ["http://szentiras.hu/"]
@@ -51,7 +51,7 @@
 	        "name": "fontSize",
 	        "title": "Betűméret",
 	        "type": "integer",
-	        "value": 13
+	        "value": 16
 	    },
 	    {
 	        "name": "tipShow",

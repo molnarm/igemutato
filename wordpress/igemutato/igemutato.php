@@ -48,7 +48,7 @@ class Igemutato {
 			// tooltip magasság
 			'tipH'  => 200,
 			// betűméret,
-			'fontSize' => 13,
+			'fontSize' => 16,
 			// tooltip távolsága a szövegtől / képenyő szélétől
 			'tipD'  => 5,
 			// tooltip megjelenítési késleltetés
