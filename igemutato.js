@@ -349,9 +349,29 @@ var Szentiras = (function() {
 	}
 	
 	function setConfig(options){
+		var data = config;
 		for (key in options) {
-			config[key] = options[key];
+			data[key] = options[key];
 		}
+// #if EMBEDDED	
+		// a bővítményekben már eleve van ellenőrzés
+		var tipW = parseInt(data.tipW),
+		tipH = parseInt(data.tipH),
+		fontSize = parseInt(data.fontSize),
+		tipShow = parseInt(data.tipShow),
+		tipHide = parseInt(data.tipHide),
+		forditas = data.forditas;
+
+		data.tipW = (isNaN(tipW) || tipW < 100) ? config.tipW : tipW;
+		data.tipH = (isNaN(tipH) || tipW < 50) ? config.tipH : tipH;
+		data.fontSize = (isNaN(fontSize) || fontSize < 5) ? config.fontSize : fontSize;
+		data.tipShow = (isNaN(tipShow) || tipShow < 0) ? config.tipShow : tipShow;
+		data.tipHide = (isNaN(tipHide) || tipHide < 0) ? config.tipHide : tipHide;
+		data.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF' ].indexOf(forditas) == -1) ? config.forditas : forditas;
+		data.excludeTags = data.excludeTags || config.excludeTags;
+		data.enableFormatting = (data.enableFormatting === undefined) ? config.enableFormatting : (data.enableFormatting ? true : false);	
+// #endif EMBEDDED
+		config = data;
 	}
 
 	function start(element) {
