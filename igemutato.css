@@ -17,7 +17,6 @@ a.ige-link, a.ige-link:hover{
 	border-radius: 10px;
 	box-shadow: 0 0 10px rgba(0,0,0,0.5);
 	border: 1px solid #e5e5e5;
-	background: #f5f5f5;
 }
 #igemutato-tooltip .szoveg{	
 	background: white;
@@ -34,7 +33,25 @@ a.ige-link, a.ige-link:hover{
 	font-size:13px;
 	text-align: left;
 }
-.igehely a,
-.igehely span{
+#igemutato-tooltip,
+.igehely select{
+	background: #f5f5f5;
+}
+.igehely div{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-weight: bold;
+}
+.igehely a{
 	margin: 0 10px;
+}
+.igehely span,
+.igehely select{
+	float: right;
+}
+.igehely select{
+	font-size: 10px;
+	margin: 2px;
+	border: 1px solid #ccc;
 }
