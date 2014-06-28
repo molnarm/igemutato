@@ -1,17 +1,12 @@
-Csak IE10+
-- XMLHttpRequest 2 (onreadystatechange helyett onload, onerror)
+(caniuse, quirksmode, MDN)
 
-Csak IE8+
-
-- Array.prototype.indexOf
-- window.innerWidth
-- XDomainRequest (de 10+ nem érdemes használni)
-
-http://rankings.hu/hu/rankings/web-browsers.html 2014.02.09.
-Firefox		37,33%
-Chrome		37,05%
-IE			11,40%
-	IE8		 3,53% <--
-	IE9		 1,83%
-	IE10	 1,37%
-	IE11	 4,52%
+- JS
+	- console					IE8 csak ha nyitva			le van kezelve
+	- array.indexOf				IE9+						meg van oldva
+	- node.textContent			IE9+						meg van oldva
+- Firefox
+	- DOMParser(text/html)		FF12+ (IE10+)				jó régi, 21+ az alapbeállítás
+	
+- CSS
+	- box-shadow				IE9+						// TODO
+	- border-radius				IE9+						// TODO

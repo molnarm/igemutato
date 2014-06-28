@@ -34,9 +34,29 @@ var Szentiras = (function() {
 	// DOM elemek
 	d = document, b = d.body,
 	// kizárt elemek
-	excludes;
+	excludes,
+	// facepalm
+	ie8;
+	
+// #if EMBEDDED
+	// IE8 indexof: http://stackoverflow.com/a/3629211/318508
+	if (!Array.prototype.indexOf)
+	{
+		Array.prototype.indexOf = function(elt) {
+			var len = this.length >>> 0;
+			var from = 0;
+			for (; from < len; from++)
+			{
+				if (from in this &&	this[from] === elt)
+					return from;
+			}
+			return -1;
+		};
+	}
+// #endif EMBEDDED
 	
 	// Megkeresi a hivatkozásokat az oldalban
+	// (valaha ez volt a [hibás] kiindulás: http://stackoverflow.com/a/2848304/318508)
 	function keres(node) {
 		var match, next, parent, replacementNode, text, left;
 		
@@ -153,7 +173,7 @@ var Szentiras = (function() {
 				console && console.log && console.log(ex.message);
 			}
 			if(xmlhttp.readystate !== 0){
-				szoveg.textContent = 'A betöltés sikertelen :-(';				
+				szoveg.textContent = 'A betöltés sikertelen :-(';		
 			}
 		};
 
@@ -169,11 +189,11 @@ var Szentiras = (function() {
 	function show(json, ige){
 		try{
 			if(json && json.error){
-				szoveg.textContent = json.error;						
+				setText(szoveg, json.error);						
 			}
 			else if(json && json.valasz){
 				if(json.valasz.hiba){
-					szoveg.textContent = json.valasz.hiba;
+					setText(szoveg, json.valasz.hiba);
 				}
 				else if(json.valasz.versek && json.valasz.versek.length) {
 // #if FIREFOX
@@ -199,12 +219,12 @@ var Szentiras = (function() {
 		catch(ex){
 			console && console.log && console.log(ex.message);
 		}
-		szoveg.textContent = 'A betöltés sikertelen :-(';
+		setText(szoveg, 'A betöltés sikertelen :-(');
 	}
 	
 // #if FIREFOX
 	function addContent(versek) {
-		var domParser = new DOMParser(), i, html;	// IE10+
+		var domParser = new DOMParser(), i, html;
 				
 		while(szoveg.firstChild){ szoveg.removeChild(szoveg.firstChild); }
 		if(config.enableFormatting){
@@ -244,6 +264,19 @@ var Szentiras = (function() {
 	}
 // #endif FIREFOX
 	
+	function setText(element, text) {
+// #if EMBEDDED
+		if(ie8){
+			element.innerText = text;
+		}
+		else {
+// #endif EMBEDDED
+			element.textContent = text;
+// #if EMBEDDED
+		}
+// #endif EMBEDDED
+	}
+	
 	function createTooltip(){		
 		tooltip = d.createElement('div'),
 		szoveg = d.createElement('div'), szoveg.className += 'szoveg', tooltip.appendChild(szoveg),
@@ -259,7 +292,7 @@ var Szentiras = (function() {
 		};
 		
 		szoveg.style.fontSize = config.fontSize + "px";
-		szoveg.style.height = (config.tipH - 31) + "px";
+		szoveg.style.height = (config.tipH - 30) + "px";
 
 		tooltip.style.display = 'none';
 		b.appendChild(tooltip);
@@ -277,7 +310,7 @@ var Szentiras = (function() {
 	}
 	
 	function showTooltip(a) {
-		var hivatkozas = a.textContent,
+		var hivatkozas = (ie8 ? a.innerText : a.textContent),
 		hivatkozasUrl = encodeURI(hivatkozas.replace(/\s/g, "")),
 		position = a.getBoundingClientRect(),
 		offset = calculateOffset(a),		
@@ -297,7 +330,7 @@ var Szentiras = (function() {
 		igehely.innerHTML = '<a href="' + a.href + '"><b>' + hivatkozas + ' (' + config.forditas + ')' + '</b></a>';
 // #endif !FIREFOX
 		
-		szoveg.textContent = "Betöltés...";
+		setText(szoveg, "Betöltés...");
 
 		fetch(hivatkozasUrl);
 
@@ -332,6 +365,8 @@ var Szentiras = (function() {
 		css.setAttribute("href", 'http://molnarm.github.io/igemutato.min.css');		
 		d.getElementsByTagName("head")[0].appendChild(css);		
 // #endif EMBEDDED
+		// IE8: http://stackoverflow.com/a/10965073/318508
+		ie8 = (window.attachEvent && !window.addEventListener);
 		createTooltip();
 		excludes = config.excludeTags.split(',');
 		keres(element);
