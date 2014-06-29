@@ -338,8 +338,8 @@ var Szentiras = (function() {
 	function calculateOffset(elem) {
 		var	box = elem.getBoundingClientRect();
 		return {
-			top: box.top + window.pageYOffset - e.clientTop,
-			left: box.left + window.pageXOffset - e.clientLeft
+			top: box.top + (window.pageYOffset || e.scrollTop || b.scrollTop) - e.clientTop,
+			left: box.left + (window.pageXOffset || e.scrollLeft || b.scrollLeft) - e.clientLeft
 		};
 	}
 	
