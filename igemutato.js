@@ -35,7 +35,7 @@ var Szentiras = (function() {
 	// aktuális adatok
 	forditas, ige,
 	// DOM elemek
-	d = document, b = d.body,
+	d = document, b = d.body, e = d.documentElement,
 	// kizárt elemek
 	excludes,
 	// facepalm
@@ -150,7 +150,7 @@ var Szentiras = (function() {
 // #endif FIREFOX
 // #if !FIREFOX
 			szoveg.innerHTML = cache[forditas][ige];
-// #endif !FIREFOX			
+// #endif !FIREFOX
 			szoveg.scrollTop = 0;
 			return;
 		}
@@ -334,13 +334,13 @@ var Szentiras = (function() {
 		b.appendChild(tooltip);
 	}
 
-	function calculateOffset(element){
-		var br = b.getBoundingClientRect(),
-	    er = element.getBoundingClientRect();
-	    return {
-	    	top: er.top - br.top,
-	    	left: er.left - br.left
-	    };
+	// jQuery.offset() kibelezve
+	function calculateOffset(elem) {
+		var	box = elem.getBoundingClientRect();
+		return {
+			top: box.top + window.pageYOffset - e.clientTop,
+			left: box.left + window.pageXOffset - e.clientLeft
+		};
 	}
 	
 	function fillTooltip(a) {
@@ -377,7 +377,7 @@ var Szentiras = (function() {
 		for (key in options) {
 			data[key] = options[key];
 		}
-// #if EMBEDDED	
+// #if EMBEDDED
 		// a bővítményekben már eleve van ellenőrzés
 		var tipW = parseInt(data.tipW),
 		tipH = parseInt(data.tipH),
