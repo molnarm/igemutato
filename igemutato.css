@@ -4,6 +4,13 @@ a.ige-link, a.ige-link:hover{
 	text-decoration:none;
 }
 #igemutato-tooltip,
+#igemutato-tooltip *{
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	-o-box-sizing: content-box;
+	box-sizing: content-box;
+}
+#igemutato-tooltip,
 #igemutato-tooltip .igehely a,
 #igemutato-tooltip .igehely a:hover{
 	font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
@@ -23,8 +30,6 @@ a.ige-link, a.ige-link:hover{
 	padding: 5px;
 	text-align: justify;
 	overflow: auto;
-	-moz-box-sizing: content-box;
-	box-sizing: content-box;
 	box-shadow: inset 0 -5px 10px -5px rgba(0,0,0,0.5);
 }
 #igemutato-tooltip .igehely{

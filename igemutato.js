@@ -335,14 +335,12 @@ var Szentiras = (function() {
 	}
 
 	function calculateOffset(element){
-		var offset = { top: 0, left: 0 };
-		do {
-			// az offsetből igazából ki kellene vonni a scrollt, de aztán a style.top-nál úgyis hozzáadnánk
-			offset.left += (element.offsetLeft + element.clientLeft);
-			offset.top += (element.offsetTop + element.clientTop);
-		}
-		while (element = element.offsetParent);
-		return offset;
+		var br = b.getBoundingClientRect(),
+	    er = element.getBoundingClientRect();
+	    return {
+	    	top: er.top - br.top,
+	    	left: er.left - br.left
+	    };
 	}
 	
 	function fillTooltip(a) {
