@@ -4,7 +4,7 @@
 	"id": "jid1-miv3JfAbewMzFw",
 	"description": "Bibliai hivatkozások beillesztése a Szentírás.hu oldalról",
 	"author": "Molnár Márton",
-	"version": "0.9.2",
+	"version": "0.9.3",
 	"icon64" : "data\\icon64.png",
 	"permissions": {
 		"cross-domain-content": ["http://szentiras.hu/"]
@@ -80,6 +80,13 @@
 	    	"description": "Ha be van kapcsolva, bizonyos szövegrészek formázva jelennek meg",
 	    	"type": "bool",
 	    	"value": true
+	    },
+	    {
+	    	"name": "showNumbers",
+	    	"title": "Fejezet- és versszámok megjelenítése",
+	    	"description": "Ha be van kapcsolva, a számok is látszanak a szövegben",
+	    	"type": "bool",
+	    	"value": false
 	    }
 	]
 }

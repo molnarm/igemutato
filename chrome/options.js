@@ -8,6 +8,7 @@ function save_options() {
 		tipHide : parseInt(document.getElementById("tipHide").value),
 		excludeTags : document.getElementById("excludeTags").value,
 		enableFormatting : document.getElementById("enableFormatting").checked,
+		showNumbers : document.getElementById("showNumbers").checked,
 	};
 
 	chrome.storage.sync.set({
@@ -32,7 +33,8 @@ function validate_options(data) {
 		tipShow : 200,
 		tipHide : 500,
 		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a",
-		enableFormatting: true
+		enableFormatting: true,
+		showNumbers: false
 	};
 
 	var options = data || {};
@@ -51,6 +53,7 @@ function validate_options(data) {
 	options.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF' ].indexOf(forditas) == -1) ? defaults.forditas : forditas;
 	options.excludeTags = options.excludeTags || defaults.excludeTags;
 	if(options.enableFormatting === undefined) options.enableFormatting = defaults.enableFormatting;
+	if(options.showNumbers === undefined) options.showNumbers = defaults.showNumbers;
 
 	return options;
 }
@@ -75,6 +78,7 @@ function restore_options() {
 		document.getElementById("tipHide").value = config.tipHide;
 		document.getElementById("excludeTags").value = config.excludeTags;
 		document.getElementById("enableFormatting").checked = config.enableFormatting;
+		document.getElementById("showNumbers").checked = config.showNumbers;
 	});
 }
 

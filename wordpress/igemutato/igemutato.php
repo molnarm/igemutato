@@ -1,8 +1,8 @@
 <?php
 /*
  Plugin Name: Igemutató
- Description: Felismeri az oldal szövegében a szentírási hivatkozásokat és felugró ablakba megjeleníti az idézett szöveget.
- Version: 2014.06.22.
+ Description: Az oldal tartalmában található szentírási hivatkozásokat jeleníti meg felugró szövegbuborékban.
+ Version: 2014.06.30.
  Author: Molnár Márton
  License: GPL
  */
@@ -58,7 +58,9 @@ class Igemutato {
 			// kizárt tagek
 			'excludeTags'  => "head,script,input,select,textarea,h1,h2,h3,a",
 			// szövegformázás
-			'enableFormatting' => true
+			'enableFormatting' => true,
+			// számok
+			'showNumbers' => false
 		);
 	}
 	
@@ -143,6 +145,7 @@ s.parentNode.insertBefore(e, s);
 		$options['forditas'] = (!in_array($options['forditas'], array('SZIT', 'KNB', 'KG', 'UF'))) ? $defaults['forditas'] : $options['forditas'];
 		$options['excludeTags'] = isset($options['excludeTags']) ? $options['excludeTags'] : $defaults['excludeTags'];
 		$options['enableFormatting'] = isset($options['enableFormatting']);
+		$options['showNumbers'] = isset($options['showNumbers']);
 
 		return $options;
 	}

@@ -18,20 +18,22 @@ var Szentiras = (function() {
 		// kizárt tagek
 		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a",
 		// formázás engedélyezése
-		enableFormatting : true
+		enableFormatting : true,
+		// számok megjelenítése
+		showNumbers: false
 	},
 	
 	regexp = /\b(?:[12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)?Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))\.?(?:\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?(?:\s*[-–—]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?)?(?:\s*[\|;]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?(?:\s*[-–—]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?)?)*)\b/g,
 	forditasok = ['KNB', 'SZIT', 'KG', 'UF'],
 	// API URL
 	url ='http://szentiras.hu/',
-	api = url + 'API/?feladat=idezet&hivatkozas=',
+	api = 'http://staging.szentiras.hu/api/idezet/',
 	// tooltip elemei
 	tooltip, szoveg, igehely, forditasSelect,
 	// timeoutok
 	linkTimeout, tipTimeout,
 	// lekérdezések kellékei
-	xmlhttp, jsonp, cache = {},
+	xmlhttp, cache = {},
 	// aktuális adatok
 	forditas, ige,
 	// DOM elemek
@@ -118,9 +120,7 @@ var Szentiras = (function() {
 		};
 		return a;
 	}
-	
-// #if !EMBEDDED
-	// a beágyazott verzió JSONP-t használ
+
 	// http://www.html5rocks.com/en/tutorials/cors/
 	function createCORSRequest(method, target) {
 		var xhr = new XMLHttpRequest();
@@ -136,13 +136,10 @@ var Szentiras = (function() {
 		}
 		return xhr;
 	}
-// #endif !EMBEDDED
-
+	
 	// Betölti a hivatkozott szöveget
 	function fetch() {	
-// #if !EMBEDDED
 		xmlhttp && xmlhttp.abort();
-// #endif !EMBEDDED
 		
 		if(cache[forditas] && cache[forditas][ige]){
 // #if FIREFOX
@@ -155,22 +152,12 @@ var Szentiras = (function() {
 			return;
 		}
 	
-		var src = api + ige + '&forditas=' + forditas;
-// #if EMBEDDED
-		// a beágyazott verzióban egyelőre JSONP-t használunk
-		jsonp && (b.removeChild(jsonp), jsonp = null);
-		jsonp = d.createElement('script'), b.appendChild(jsonp);
-		jsonp.src = src + '&callback=Szentiras.parse';
-// #endif EMBEDDED
-// #if !EMBEDDED
-		// a bővítményekben lehet CORS
+		var src = api + ige + '/' + forditas;
 		xmlhttp = createCORSRequest('GET', src);
 		xmlhttp.onreadystatechange = function() {
-			if (tooltip.style.display == 'none')
-				return;
 			try{
 				if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-					show(JSON.parse(xmlhttp.responseText), ige);
+					show(JSON.parse(xmlhttp.responseText));
 					return;
 				}
 			}
@@ -182,12 +169,7 @@ var Szentiras = (function() {
 			}
 		};
 
-		xmlhttp.send();		
-// #endif !EMBEDDED
-	}
-	
-	function parse(json){
-		show(json, null);
+		xmlhttp.send();	
 	}
 
 	// Feldolgozza a JSON választ
@@ -201,24 +183,31 @@ var Szentiras = (function() {
 					setText(szoveg, json.valasz.hiba);
 				}
 				else if(json.valasz.versek && json.valasz.versek.length) {
+					var versek = json.valasz.versek;
 // #if FIREFOX
-					addContent(json.valasz.versek);
+					addContent(versek);
 					cache[forditas] || (cache[forditas] = {});
-					cache[forditas][ige] = json.valasz.versek;
+					cache[forditas][ige] = versek;
 // #endif FIREFOX
 // #if !FIREFOX
-					var result = '';
-					for ( var i = 0; i < json.valasz.versek.length; i++)
-						result += json.valasz.versek[i].szoveg + ' ';
-					if(!config.enableFormatting)
-						result = result.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+					var result = '', vers;
+					if(config.showNumbers){
+						result += '<span class="konyv">' + versszam(versek[0]).fejezet + '</span>&nbsp;';
+					}
+					for (var i = 0; i < versek.length; i++) {
+						vers = versek[i].szoveg.trim();
+						if(!config.enableFormatting)
+							vers = vers.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+						if(config.showNumbers){
+							vers = '<sup>' + versszam(versek[i]).vers + '</sup>' + vers;
+						}
+						result += vers + ' ';
+					}
 					szoveg.innerHTML = result;
-// #endif !FIREFOX
-// #if CHROME
-					// EMBEDDED esetben nem tudjuk, mi volt a kérés // TODO
+
 					cache[forditas] || (cache[forditas] = {});
 					cache[forditas][ige] = result;
-// #endif CHROME
+// #endif !FIREFOX
 					szoveg.scrollTop = 0;
 					return;
 				}
@@ -232,21 +221,28 @@ var Szentiras = (function() {
 	
 // #if FIREFOX
 	function addContent(versek) {
-		var domParser = new DOMParser(), i, html;
+		var domParser = new DOMParser(), i, html, fejezet, vers, szam;
 				
-		while(szoveg.firstChild){ szoveg.removeChild(szoveg.firstChild); }
-		if(config.enableFormatting){
-			for(i = 0; i < versek.length; i++){
-				html = domParser.parseFromString(versek[i].szoveg, 'text/html');
+		while(szoveg.firstChild) { szoveg.removeChild(szoveg.firstChild); }
+		if(config.showNumbers){
+			fejezet = d.createElement('span'), fejezet.className = 'konyv', setText(fejezet, versszam(versek[0]).fejezet);
+			szoveg.appendChild(fejezet), szoveg.appendChild(d.createTextNode(' '));
+		}
+		for(i = 0; i < versek.length; i++){
+			vers = versek[i].szoveg.trim();
+			
+			if(config.showNumbers){
+				szam = d.createElement('sup'), setText(szam, versszam(versek[i]).vers);
+				szoveg.appendChild(fejezet);
+			}
+			if(config.enableFormatting){
+				html = domParser.parseFromString(vers, 'text/html');
 				if(html.body && html.body.firstChild && html.body.firstChild.nodeName != "parserError"){
 					addElements(szoveg, html.body.childNodes);
 				}
 			}
-		}
-		else{
-			szoveg.textContent = '';
-			for(i = 0; i < versek.length; i++){
-				szoveg.textContent += (versek[i].szoveg.replace(/<[^>]+>/g, ' ') + ' ').replace(/\s+/g, ' ');
+			else{
+				szoveg.textContent += (vers.replace(/<[^>]+>/g, ' ') + ' ').replace(/\s+/g, ' ');
 			}
 		}
 	}
@@ -272,6 +268,14 @@ var Szentiras = (function() {
 	}
 // #endif FIREFOX
 	
+	function versszam(vers){
+		var kod = vers.hely.gepi.toString();
+		return {
+			fejezet: parseInt(kod.substring(3, 6)),
+			vers: parseInt(kod.substring(6, 9))
+		};
+	}
+	
 	function setText(element, text) {
 // #if EMBEDDED
 		if(ie8){
@@ -296,7 +300,7 @@ var Szentiras = (function() {
 		// amíg a tooltipen van az egér, addig marad megjelenítve
 		tooltip.onmouseover = function() { clearTimeout(tipTimeout); };
 		// ha elvisszük róla az egeret, akkor elrejtjük
-		tooltip.onmouseout = function() {
+		tooltip.onmouseout = function(event) {
 			clearTimeout(tipTimeout);
 			tipTimeout = setTimeout(function() { hideTooltip(); }, config.tipHide);
 		};
@@ -311,7 +315,7 @@ var Szentiras = (function() {
 		for (var i = 0; i < forditasok.length; i++) {
 		    option = d.createElement('option');
 		    option.value = forditasok[i];
-		    option.text = forditasok[i];
+		    setText(option, forditasok[i]);
 		    if(forditas == forditasok[i]){
 		    	option.selected = true;
 		    }
@@ -393,7 +397,8 @@ var Szentiras = (function() {
 		data.tipHide = (isNaN(tipHide) || tipHide < 0) ? config.tipHide : tipHide;
 		data.forditas = (forditasok.indexOf(forditas) == -1) ? config.forditas : forditas;
 		data.excludeTags = data.excludeTags || config.excludeTags;
-		data.enableFormatting = (data.enableFormatting === undefined) ? config.enableFormatting : (data.enableFormatting ? true : false);	
+		data.enableFormatting = (data.enableFormatting === undefined) ? config.enableFormatting : data.enableFormatting;
+		data.showNumbers = (data.showNumbers === undefined) ? config.showNumbers : data.showNumbers;	
 // #endif EMBEDDED
 		config = data;
 	}
@@ -419,9 +424,7 @@ var Szentiras = (function() {
 	
 	return {
 		setConfig: setConfig,
-		start: start,
-		// ez a JSONP miatt kell
-		parse: parse
+		start: start
 	};
 })();
 // #if EMBEDDED

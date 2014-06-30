@@ -21,7 +21,8 @@ function validateOptions(){
 		tipHide : 500,
 		fontSize : 16,
 		excludeTags : "head,script,input,select,textarea,h1,h2,h3,a",
-		enableFormatting: true
+		enableFormatting: true,
+		showNumbers: false
 	},
 	options = prefs.prefs;
 
@@ -39,4 +40,5 @@ function validateOptions(){
 	prefs.prefs.fontSize = (isNaN(fontSize) || fontSize < 5) ? defaults.fontSize : fontSize;
 	prefs.prefs.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF' ].indexOf(forditas) == -1) ? defaults.forditas : forditas;
 	if(prefs.prefs.enableFormatting === undefined) prefs.prefs.enableFormatting = defaults.enableFormatting; 
+	if(prefs.prefs.showNumbers === undefined) prefs.prefs.showNumbers = defaults.showNumbers; 
 }

@@ -32,6 +32,13 @@ a.ige-link, a.ige-link:hover{
 	overflow: auto;
 	box-shadow: inset 0 -5px 10px -5px rgba(0,0,0,0.5);
 }
+#igemutato-tooltip .konyv,
+#igemutato-tooltip sup{
+	color: #999;
+}
+#igemutato-toolip .konyv{
+	font-weight: bold;
+}
 #igemutato-tooltip .igehely{
 	width: 100%;
 	height:20px;

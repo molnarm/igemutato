@@ -58,6 +58,12 @@
 					<span class="description">Ha be van kapcsolva, bizonyos szövegrészek formázva jelennek meg</span>
 				</td>
 			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="<?php echo $O."[showNumbers]";?>">Fejezet- és versszámok megjelenítése</label></th>
+				<td><input type="checkbox" id="<?php echo $O."[showNumbers]";?>" name="<?php echo $O."[showNumbers]";?>" <?php checked($options['showNumbers'], true); ?>"/>
+					<span class="description">Ha be van kapcsolva, a számok is látszanak a szövegben</span>
+				</td>
+			</tr>
 		</table>
 		<p class="submit"><input type="submit" class="button-primary" value="Mentés" /></p>
 	</form>
