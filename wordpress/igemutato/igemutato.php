@@ -17,9 +17,9 @@ class Igemutato {
 	const OPTION_NAME = 'igemutato_options';
 	
 	/**
-	 * Handle of JavaScript files
+	 * Handle of CSS file
 	 */
-	const SCRIPT_HANDLE = 'igemutato';
+	const STYLE_HANDLE = 'igemutato';
 	
 	function __construct() {	
 		// Activation
@@ -27,8 +27,10 @@ class Igemutato {
 		// Deactivation
 		register_deactivation_hook(__FILE__, array($this, 'deactivate'));
 		
+		// Custom CSS
+		add_action( 'wp_enqueue_styles', array($this, 'enqueue_styles'));
 		// Custom JS
- -		add_action('wp_footer', array($this, 'wp_footer'));
+ -		add_action('wp_footer', array($this, 'footer'));
 		
 		// Admin init
 		add_action('admin_init',array($this,'admin_init'));
@@ -85,9 +87,16 @@ class Igemutato {
 	}
 
 	/**
+	 * Custom CSS
+	 */
+	public function enqueue_styles(){
+		wp_enqueue_style(Igemutato::STYLE_HANDLE, plugins_url('igemutato.css', __FILE__));
+	}
+
+	/**
 	 * Custom JS
 	 */
-	public function wp_footer() {
+	public function footer() {
  		global $post;
  		if(!is_admin() && !empty($post)): ?>
 <script>
@@ -95,7 +104,7 @@ var igemutato = {config: <?php echo json_encode(get_option(Igemutato::OPTION_NAM
 s = document.getElementsByTagName('script')[0],
 e = document.createElement('script');
 e.id = 'igemutato-script';
-e.src = 'http://molnarm.github.io/igemutato.min.js';
+e.src = '<?php echo plugins_url('igemutato.js', __FILE__); ?>';
 s.parentNode.insertBefore(e, s);
 </script>
  		<?php endif;

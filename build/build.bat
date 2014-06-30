@@ -24,6 +24,11 @@ move /y *.xpi ..\extensions\firefox.xpi
 cd..
 
 echo.
+echo WordPress
+powershell -ExecutionPolicy Bypass -File "build\stripregions.ps1" igemutato.js wordpress\igemutato\igemutato.js WORDPRESS
+copy igemutato.css "wordpress\igemutato\igemutato.css" /y
+
+echo.
 echo Beágyazható
 powershell -ExecutionPolicy Bypass -File "build\stripregions.ps1" igemutato.js web\igemutato.js EMBEDDED
 java -jar ..\tools\yuicompressor-2.4.8.jar web\igemutato.js -o web\igemutato.min.js -v
