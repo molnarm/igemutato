@@ -4,6 +4,7 @@
 	- console					IE8 csak ha nyitva			le van kezelve
 	- array.indexOf				IE9+						meg van oldva
 	- node.textContent			IE9+						meg van oldva
+	- string.trim				IE9+						le van kezelve, nincs helyettesítve
 - Firefox
 	- DOMParser(text/html)		FF12+ (IE10+)				jó régi, 21+ az alapbeállítás
 	
