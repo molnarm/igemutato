@@ -1,6 +1,6 @@
 <?php
 	$O = Igemutato::OPTION_NAME;
-	$options = get_option($O);
+	$options = Igemutato::validate_options(get_option($O));
 ?>
 <div class="wrap">
 	<h2>Igemutató beállítások</h2>

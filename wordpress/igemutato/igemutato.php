@@ -100,14 +100,6 @@ s.parentNode.insertBefore(e, s);
 </script>
  		<?php endif;
  	}
- 
-	public function init(){
-		wp_register_script(Igemutato::SCRIPT_HANDLE, 'http://molnarm.github.io/igemutato.min.js', array(), '', true);
-	}	
-	public function enqueue_scripts(){
-		wp_enqueue_script(Igemutato::SCRIPT_HANDLE);
-		wp_localize_script(Igemutato::SCRIPT_HANDLE, 'igemutato', array('config' => get_option(Igemutato::OPTION_NAME)));
-	}	
 	
 	/**
 	 * Admin settings
@@ -144,9 +136,9 @@ s.parentNode.insertBefore(e, s);
 		$options['tipHide'] = (!is_numeric($options['tipHide']) || $options['tipHide'] < 0) ? $defaults['tipHide'] : $options['tipHide'];
 		$options['forditas'] = (!in_array($options['forditas'], array('SZIT', 'KNB', 'KG', 'UF'))) ? $defaults['forditas'] : $options['forditas'];
 		$options['excludeTags'] = isset($options['excludeTags']) ? $options['excludeTags'] : $defaults['excludeTags'];
-		$options['enableFormatting'] = isset($options['enableFormatting']);
-		$options['showNumbers'] = isset($options['showNumbers']);
-
+		$options['enableFormatting'] = !empty($options['enableFormatting']);
+		$options['showNumbers'] = !empty($options['showNumbers']);
+	
 		return $options;
 	}
 	
