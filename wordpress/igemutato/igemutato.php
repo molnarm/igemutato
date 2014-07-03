@@ -28,7 +28,7 @@ class Igemutato {
 		register_deactivation_hook(__FILE__, array($this, 'deactivate'));
 		
 		// Custom CSS
-		add_action( 'wp_enqueue_styles', array($this, 'enqueue_styles'));
+		add_action( 'wp_enqueue_scripts', array($this, 'enqueue_styles'));
 		// Custom JS
  -		add_action('wp_footer', array($this, 'footer'));
 		
