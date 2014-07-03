@@ -98,28 +98,42 @@ var Szentiras = (function() {
 
 		a.className += ' ige-link';
 		a.appendChild(d.createTextNode(hivatkozas));
+
 		a.target = '_blank';
-		a.onmouseover = function(event) {
-			// ha rámutatunk egy hivatkozásra, akkor új tooltipet jelenítünk meg
-			clearTimeout(linkTimeout);
-			clearTimeout(tipTimeout);
-			hideTooltip();
-			fillTooltip(a);
-			linkTimeout = setTimeout(function() {
-				tooltip.style.display = 'block';
-				szoveg.scrollTop = 0;
-			}, config.tipShow);
-		};
-		a.onmouseout = function() {
-			// ha elvisszük az egeret a hivatkozásról, akkor elrejtjük a tooltipet
-			clearTimeout(linkTimeout);
-			if (tooltip) {
+// #if !CHROME
+// #if !FIREFOX
+		if(hasTouch()) {
+			a.href = url + forditas + '/' + encodeURI(hivatkozas.replace(/\s/g, ""));
+		}
+		else {
+// #endif !CHROME
+// #endif !FIREFOX
+			a.onmouseover = function(event) {
+				// ha rámutatunk egy hivatkozásra, akkor új tooltipet jelenítünk meg
+				clearTimeout(linkTimeout);
 				clearTimeout(tipTimeout);
-				tipTimeout = setTimeout(function() {
-					hideTooltip();
-				}, config.tipHide);
-			}
-		};
+				hideTooltip();
+				fillTooltip(a);
+				linkTimeout = setTimeout(function() {
+					tooltip.style.display = 'block';
+					szoveg.scrollTop = 0;
+				}, config.tipShow);
+			};
+			a.onmouseout = function() {
+				// ha elvisszük az egeret a hivatkozásról, akkor elrejtjük a tooltipet
+				clearTimeout(linkTimeout);
+				if (tooltip) {
+					clearTimeout(tipTimeout);
+					tipTimeout = setTimeout(function() {
+						hideTooltip();
+					}, config.tipHide);
+				}
+			};
+// #if !CHROME
+// #if !FIREFOX
+		}
+// #endif !CHROME
+// #endif !FIREFOX
 		return a;
 	}
 
@@ -431,6 +445,21 @@ var Szentiras = (function() {
 // #endif !FIREFOX
 		config = data;
 	}
+
+// #if !FIREFOX
+// #if !CHROME
+	// http://stackoverflow.com/a/20293441/318508
+	function hasTouch() {
+		try {
+			d.createEvent("TouchEvent");
+			return true;
+		}
+		catch(ex) {
+			return false;
+		}
+	}
+// #endif !CHROME
+// #endif !FIREFOX
 
 	function start(element) {
 // #if !WORDPRESS
