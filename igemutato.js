@@ -261,13 +261,13 @@ var Szentiras = (function() {
 				}
 			}
 			else {
-				szoveg.textContent += (vers.replace(/<[^>]+>/g, ' ') + ' ').replace(/\s+/g, ' ');
+				szoveg.appendChild(d.createTextNode((vers.replace(/<[^>]+>/g, ' ') + ' ').replace(/\s+/g, ' ')));
 			}
 		}
 	}
 
 	function addElements(root, nodes) {
-		var whitelist = /br|i|em|u|b|strong|center/i, node, next;
+		var whitelist = /br|i|em|u|b|strong|center|span|sup/i, node, next;
 
 		node = nodes[0];
 		do {
@@ -433,19 +433,25 @@ var Szentiras = (function() {
 	}
 
 	function start(element) {
-// #if !EMBEDDED
 // #if !WORDPRESS
+// #if !EMBEDDED
 		if (d.getElementById('igemutato-script'))
 			return;
-// #endif !WORDPRESS
 // #endif !EMBEDDED
-// #if EMBEDDED
 		var css = d.createElement("link");
 		css.setAttribute("rel", "stylesheet");
 		css.setAttribute("type", "text/css");
+// #if CHROME
+		css.setAttribute("href", chrome.extension.getURL('igemutato.min.css'));
+// #endif CHROME
+// #if FIREFOX
+		css.setAttribute("href", config.firefoxCSS);
+// #endif FIREFOX
+// #if EMBEDDED
 		css.setAttribute("href", 'http://molnarm.github.io/igemutato.min.css');
-		d.getElementsByTagName("head")[0].appendChild(css);
 // #endif EMBEDDED
+		d.getElementsByTagName("head")[0].appendChild(css);
+// #endif !WORDPRESS
 		// IE8: http://stackoverflow.com/a/10965073/318508
 		ie8 = (window.attachEvent && !window.addEventListener);
 		forditas = config.forditas;

@@ -26,7 +26,8 @@ cd..
 echo.
 echo WordPress
 powershell -ExecutionPolicy Bypass -File "build\stripregions.ps1" igemutato.js wordpress\igemutato\igemutato.js WORDPRESS
-copy igemutato.css "wordpress\igemutato\igemutato.css" /y
+java -jar ..\tools\yuicompressor-2.4.8.jar wordpress\igemutato\igemutato.js -o wordpress\igemutato\igemutato.min.js -v
+copy extensions\igemutato.min.css "wordpress\igemutato\igemutato.min.css" /y
 
 echo.
 echo Beágyazható

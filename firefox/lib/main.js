@@ -5,9 +5,9 @@ var pageMod = require("sdk/page-mod");
 pageMod.PageMod({
 	include : ["http://*", "https://*"],
 	contentScriptFile : [data.url("igemutato.min.js"), data.url("content.js")],
-	contentStyleFile : [data.url("igemutato.min.css")],
 	onAttach: function(worker) {
 		validateOptions();
+		prefs.prefs.firefoxCSS = data.url('igemutato.min.css');
 		worker.port.emit("prefs", prefs.prefs);
 	}
 });

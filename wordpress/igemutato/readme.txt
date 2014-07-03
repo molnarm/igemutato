@@ -1,6 +1,7 @@
 === Igemutató ===
 Contributors: molnarm
 Tags: bible, biblia, szentírás, tooltip
+Plugin URI: http://molnarm.github.io/igemutato/
 Requires at least: 2.7
 Tested up to: 3.9
 Stable tag: trunk
@@ -17,6 +18,3 @@ A bővítmény a szentiras.hu API-ját használja.
 == Installation ==
 
 A bővítmény bekapcsolása után működőképes. Ha a beállításokon szeretnénk változtatni, a Beállítások / Igemutató oldalon tehetjük meg.
-
-== Frequently Asked Questions ==
-http://molnarm.github.io/igemutato/

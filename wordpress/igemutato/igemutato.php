@@ -2,7 +2,7 @@
 /*
  Plugin Name: Igemutató
  Description: Az oldal tartalmában található szentírási hivatkozásokat jeleníti meg felugró szövegbuborékban.
- Version: 2014.06.30.
+ Version: 1.0
  Author: Molnár Márton
  License: GPL
  */
@@ -90,7 +90,7 @@ class Igemutato {
 	 * Custom CSS
 	 */
 	public function enqueue_styles(){
-		wp_enqueue_style(Igemutato::STYLE_HANDLE, plugins_url('igemutato.css', __FILE__));
+		wp_enqueue_style(Igemutato::STYLE_HANDLE, plugins_url('igemutato.min.css', __FILE__));
 	}
 
 	/**
@@ -104,7 +104,7 @@ var igemutato = {config: <?php echo json_encode(get_option(Igemutato::OPTION_NAM
 s = document.getElementsByTagName('script')[0],
 e = document.createElement('script');
 e.id = 'igemutato-script';
-e.src = '<?php echo plugins_url('igemutato.js', __FILE__); ?>';
+e.src = '<?php echo plugins_url('igemutato.min.js', __FILE__); ?>';
 s.parentNode.insertBefore(e, s);
 </script>
  		<?php endif;
