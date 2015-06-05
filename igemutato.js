@@ -27,7 +27,7 @@ var Szentiras = (function() {
 	forditasok = [ 'KNB', 'SZIT', 'KG', 'UF' ],
 	// API URL
 	url = 'http://szentiras.hu/',
-	api = 'http://staging.szentiras.hu/api/idezet/',
+	api = 'http://szentiras.hu/api/idezet/',
 	// tooltip elemei
 	tooltip, szoveg, igehely, forditasSelect,
 	// timeoutok
