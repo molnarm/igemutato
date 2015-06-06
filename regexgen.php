@@ -26,7 +26,8 @@ $chapterReference = "{$chapterId}(?:[,:]{$space}{$verseReference})?";
 $chapterRange = "{$chapterReference}(?:{$space}[-–—]{$space}{$chapterReference})?";
 $bookReference = "{$chapterRange}(?:{$space}[\|;]{$space}{$chapterRange})*";
 
-$regex = "\b{$books}\.?(?:{$space}{$bookReference})\b";
+// ékezetek vs \b : http://stackoverflow.com/questions/5436824/matching-accented-characters-with-javascript-regexes
+$regex = "(?:[^\wÁÉÓ]|^){$books}\.?(?:{$space}{$bookReference})(?:[^\w\u00C0-\u017F]|$)";
 
 echo $regex;
 
