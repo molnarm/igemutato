@@ -30,10 +30,14 @@ java -jar ..\tools\yuicompressor-2.4.8.jar wordpress\igemutato\igemutato.js -o w
 copy extensions\igemutato.min.css "wordpress\igemutato\igemutato.min.css" /y
 
 echo.
-echo Beágyazható
+echo Embedded
 powershell -ExecutionPolicy Bypass -File "build\stripregions.ps1" igemutato.js web\igemutato.js EMBEDDED
 java -jar ..\tools\yuicompressor-2.4.8.jar web\igemutato.js -o web\igemutato.min.js -v
 copy extensions\igemutato.min.css "web\igemutato.min.css" /y
+
+echo.
+echo Cleanup
+del extensions\igemutato.min.css
 
 echo.
 echo Done.
