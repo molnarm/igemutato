@@ -18,3 +18,8 @@ A bővítmény a szentiras.hu API-ját használja.
 == Installation ==
 
 A bővítmény bekapcsolása után működőképes. Ha a beállításokon szeretnénk változtatni, a Beállítások / Igemutató oldalon tehetjük meg.
+
+== Screenshots ==
+
+1. A hivatkozott szöveg több fordításban is olvasható.
+2. Beállítható a formázás illetve a versszámozás engedélyezése és sok más opció. 
