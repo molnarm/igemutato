@@ -19,7 +19,7 @@ echo Firefox
 powershell -ExecutionPolicy Bypass -File "build\stripregions.ps1" igemutato.js firefox\data\igemutato.min.js FIREFOX
 copy extensions\igemutato.min.css "firefox\data\igemutato.min.css" /y
 cd firefox
-call cfx xpi
+call jpm xpi
 move /y *.xpi ..\extensions\firefox.xpi
 cd..
 
