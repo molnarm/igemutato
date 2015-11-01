@@ -31,6 +31,10 @@
 		        {
 		            "value": "UF",
 		            "label": "Magyar Bibliatársulat újfordítású Bibliája (protestáns)"
+		        },
+		        {
+		            "value": "BD",
+		            "label": "Békés-Dalos Újszövetség"
 		        }
 		    ]
 	    },

@@ -50,7 +50,7 @@ function validate_options(data) {
 	options.fontSize = (isNaN(fontSize) || fontSize < 5) ? defaults.fontSize : fontSize;
 	options.tipShow = (isNaN(tipShow) || tipShow < 0) ? defaults.tipShow : tipShow;
 	options.tipHide = (isNaN(tipHide) || tipHide < 0) ? defaults.tipHide : tipHide;
-	options.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF' ].indexOf(forditas) == -1) ? defaults.forditas : forditas;
+	options.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF', 'BD' ].indexOf(forditas) == -1) ? defaults.forditas : forditas;
 	options.excludeTags = options.excludeTags || defaults.excludeTags;
 	if(options.enableFormatting === undefined) options.enableFormatting = defaults.enableFormatting;
 	if(options.showNumbers === undefined) options.showNumbers = defaults.showNumbers;

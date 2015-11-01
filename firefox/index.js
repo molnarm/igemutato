@@ -38,7 +38,7 @@ function validateOptions(){
 	prefs.prefs.tipShow = (isNaN(tipShow) || tipShow < 0) ? defaults.tipShow : tipShow;
 	prefs.prefs.tipHide = (isNaN(tipHide) || tipHide < 0) ? defaults.tipHide : tipHide;
 	prefs.prefs.fontSize = (isNaN(fontSize) || fontSize < 5) ? defaults.fontSize : fontSize;
-	prefs.prefs.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF' ].indexOf(forditas) == -1) ? defaults.forditas : forditas;
+	prefs.prefs.forditas = ([ 'SZIT', 'KNB', 'KG', 'UF', 'BD' ].indexOf(forditas) == -1) ? defaults.forditas : forditas;
 	if(prefs.prefs.enableFormatting === undefined) prefs.prefs.enableFormatting = defaults.enableFormatting; 
 	if(prefs.prefs.showNumbers === undefined) prefs.prefs.showNumbers = defaults.showNumbers; 
 }
