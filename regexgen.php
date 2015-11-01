@@ -7,7 +7,7 @@
  *  - a pontosvesszővel elválasztott önálló hivatkozásokat egyenként ismeri fel, nem egyben
  *  - cserébe | helyett ;-t is elfogad fejezet-elválasztónak
  *  
- *  Ellenőrzéshez: http://regexpal.com/
+ *  Ellenőrzéshez: https://regex101.com/r/gG9gN1
  */
 
 // ez kézzel készül, hogy rövid legyen, felismeri az összes jó rövidítést és néhány rosszat, majd bővíteni kell egy kicsit
@@ -27,7 +27,7 @@ $chapterRange = "{$chapterReference}(?:{$space}[-–—]{$space}{$chapterReferen
 $bookReference = "{$chapterRange}(?:{$space}[\|;]{$space}{$chapterRange})*";
 
 // ékezetek vs \b : http://stackoverflow.com/questions/5436824/matching-accented-characters-with-javascript-regexes
-$regex = "(?:[^\wÁÉÓ]|^){$books}\.?(?:{$space}{$bookReference})(?:[^\w\u00C0-\u017F]|$)";
+$regex = "(?:^|[^\w\u00C0-\u017F]){$books}\.?(?:{$space}{$bookReference})(?:(?=[^\w\u00C0-\u017F])|$)";
 
 echo $regex;
 
