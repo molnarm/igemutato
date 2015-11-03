@@ -27,7 +27,7 @@ var Szentiras = (function() {
 	forditasok = [ 'KNB', 'SZIT', 'KG', 'UF', 'BD' ],
 	// API URL
 	url = 'http://szentiras.hu/',
-	api = 'http://szentiras.hu/api/idezet/',
+	api = url + 'api/idezet/',
 	// tooltip elemei
 	tooltip, szoveg, igehely, forditasSelect,
 	// timeoutok
@@ -162,18 +162,22 @@ var Szentiras = (function() {
 		}
 
 		var src = api + ige + '/' + forditas,
+		fail = function() {
+			szoveg.textContent = 'A betöltés sikertelen :-(';
+		},
 		success = function() {
 			try {
-				if (!xmlhttp.readystatechange || xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-					show(JSON.parse(xmlhttp.responseText));
-					return;
+				if (!xmlhttp.readystatechange || xmlhttp.readyState === 4){
+					if(xmlhttp.status === 200) {
+						show(JSON.parse(xmlhttp.responseText));
+					}
+					else{
+						fail();
+					}
 				}
 			}
 			catch (ex) {
 				console && console.log && console.log(ex.message);
-			}
-			if (xmlhttp.readystate !== 0) {
-				szoveg.textContent = 'A betöltés sikertelen :-(';
 			}
 		};
 
@@ -184,9 +188,7 @@ var Szentiras = (function() {
 		}
 		else {
 			xmlhttp.onload = success;
-			xmlhttp.onerror = function() {
-				szoveg.textContent = 'A betöltés sikertelen :-(';
-			};
+			xmlhttp.onerror = fail;
 		}
 
 		xmlhttp.send();
@@ -202,44 +204,50 @@ var Szentiras = (function() {
 				if (json.valasz.hiba) {
 					setText(szoveg, json.valasz.hiba);
 				}
-				else if (json.valasz.versek && json.valasz.versek.length) {
-					var versek = json.valasz.versek;
+				else if (json.valasz.versek) {
+					if(json.valasz.versek.length) {				
+						var versek = json.valasz.versek;
 // #if FIREFOX
-					addContent(versek);
-					cache[forditas] || (cache[forditas] = {});
-					cache[forditas][ige] = versek;
+						addContent(versek);
+						cache[forditas] || (cache[forditas] = {});
+						cache[forditas][ige] = versek;
 // #endif FIREFOX
 // #if !FIREFOX
-					var result = '', vers, fejezet = 0, szamok;
-					for (var i = 0; i < versek.length; i++) {
-						vers = versek[i].szoveg; 
-						if (!ie8) vers = vers.trim(); // :-(
-						if (!config.enableFormatting)
-							vers = vers.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
-						if (config.showNumbers) {
-							szamok = versszam(versek[i]);
-							vers = '<sup>' + szamok.vers + '</sup>' + vers;
-							if (szamok.fejezet != fejezet) {
-								vers = '<span class="konyv">' + szamok.fejezet + '</span>&nbsp;' + vers;
-								fejezet = szamok.fejezet;
+						var result = '', vers, fejezet = 0, szamok;
+						for (var i = 0; i < versek.length; i++) {
+							vers = versek[i].szoveg; 
+							if (!ie8) vers = vers.trim(); // :-(
+							if (!config.enableFormatting)
+								vers = vers.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+							if (config.showNumbers) {
+								szamok = versszam(versek[i]);
+								vers = '<sup>' + szamok.vers + '</sup>' + vers;
+								if (szamok.fejezet != fejezet) {
+									vers = '<span class="konyv">' + szamok.fejezet + '</span>&nbsp;' + vers;
+									fejezet = szamok.fejezet;
+								}
 							}
+							result += vers + ' ';
 						}
-						result += vers + ' ';
-					}
-					szoveg.innerHTML = result;
-
-					cache[forditas] || (cache[forditas] = {});
-					cache[forditas][ige] = result;
+						szoveg.innerHTML = result;
+	
+						cache[forditas] || (cache[forditas] = {});
+						cache[forditas][ige] = result;
 // #endif !FIREFOX
-					szoveg.scrollTop = 0;
-					return;
+						szoveg.scrollTop = 0;
+						return;
+					}
+					else{
+						setText(szoveg, 'Nem található a kért szöveg, talán egy másik fordításban?');
+						return;
+					}
 				}
 			}
 		}
 		catch (ex) {
 			console && console.log && console.log(ex.message);
 		}
-		setText(szoveg, 'A betöltés sikertelen :-(');
+		setText(szoveg, 'Valami baj van a szöveggel...');
 	}
 
 // #if FIREFOX
@@ -361,7 +369,7 @@ var Szentiras = (function() {
 			fetch();
 		};
 
-		forras = d.createElement('a'), forras.href = 'http://szentiras.hu', forras.target = '_blank', setText(forras, 'szentiras.hu »');
+		forras = d.createElement('a'), forras.href = url, forras.target = '_blank', setText(forras, 'szentiras.hu »');
 		span = d.createElement('span'), span.appendChild(forras);
 
 		footer.appendChild(span);
