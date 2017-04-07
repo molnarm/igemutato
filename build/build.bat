@@ -10,7 +10,7 @@ echo Chrome
 powershell -ExecutionPolicy Bypass -File "build\stripregions.ps1" igemutato.js chrome\igemutato.js CHROME
 java -jar ..\tools\yuicompressor-2.4.8.jar chrome\igemutato.js -o chrome\igemutato.min.js -v
 copy extensions\igemutato.min.css "chrome\igemutato.min.css" /y
-call %LOCALAPPDATA%\Google\Chrome\Application\chrome.exe --pack-extension=%1\chrome --pack-extension-key=%1\extensions\igemutato.pem
+call "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --pack-extension=%1\chrome --pack-extension-key=%1\extensions\igemutato.pem
 move /y *.crx extensions\chrome.crx
 
 echo.

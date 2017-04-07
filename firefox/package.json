@@ -4,10 +4,12 @@
 	"id": "jid1-miv3JfAbewMzFw@jetpack",
 	"description": "Bibliai hivatkozások beillesztése a Szentírás.hu oldalról",
 	"author": "Molnár Márton",
-	"version": "1.2.1",
-	"permissions": {
-		"cross-domain-content": ["http://szentiras.hu/"]
-	},
+	"version": "1.3",
+	"icon64" : "data\\icon64.png",
+  "permissions": {
+    "cross-domain-content": [ "http://szentiras.hu/" ]
+  },
+  "main": "lib/main.js",
 	"preferences":  [
 		{
 	        "name": "forditas",
