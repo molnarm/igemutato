@@ -1,16 +1,12 @@
 const preferences = require("sdk/simple-prefs");
 
 exports.setSyncLegacyDataPort = function (port) {
-    validateOptions(prefs);
-    port.postMessage({
-        prefs: preferences.prefs
-    });
+    validateOptions(preferences.prefs);
+    port.postMessage(preferences.prefs);
 
     preferences.on("", () => {
-        validateOptions(prefs);
-        port.postMessage({
-            prefs: preferences.prefs
-        });
+        validateOptions(preferences.prefs);
+        port.postMessage(preferences.prefs);
     });
 };
 

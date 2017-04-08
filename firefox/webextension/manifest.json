@@ -3,9 +3,6 @@
   "name": "Szentírás",
   "description": "Bibliai hivatkozások beillesztése a Szentírás.hu oldalról",
   "version": "1.3",
-  "icons": {
-    "128": "icon.png"
-  },
   "permissions": [
     "storage",
     "http://szentiras.hu/"
@@ -13,9 +10,9 @@
   "background": {
     "scripts": [ "background.js" ]
   },
-  "options_ui": {
-    "page": "options.html"
-  },
+  //"options_ui": {
+  //  "page": "options.html"
+  //},
   "content_scripts": [
     {
       "matches": [ "http://*/*", "https://*/*" ],
