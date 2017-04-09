@@ -16,8 +16,8 @@ move /y *.crx extensions\chrome.crx
 echo.
 echo Firefox
 
-powershell -ExecutionPolicy Bypass -File "build\stripregions.ps1" igemutato.js firefox\data\igemutato.min.js FIREFOX
-copy extensions\igemutato.min.css "firefox\data\igemutato.min.css" /y
+powershell -ExecutionPolicy Bypass -File "build\stripregions.ps1" igemutato.js firefox\webextension\igemutato.min.js FIREFOX
+copy extensions\igemutato.min.css "firefox\webextension\igemutato.min.css" /y
 cd firefox
 call jpm xpi
 move /y *.xpi ..\extensions\firefox.xpi
