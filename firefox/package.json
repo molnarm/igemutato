@@ -32,7 +32,11 @@
 		        },
 		        {
 		            "value": "UF",
-		            "label": "Magyar Bibliatársulat újfordítású Bibliája (protestáns)"
+		            "label": "Magyar Bibliatársulat újfordítású Bibliája 1990 (protestáns)"
+		        },
+		        {
+		            "value": "RUF",
+		            "label": "Magyar Bibliatársulat újfordítású Bibliája 2014 (protestáns)"
 		        },
 		        {
 		            "value": "BD",
