@@ -23,11 +23,11 @@ var Szentiras = (function () {
         showNumbers: false
     },
 
-	regexp = /(?:^|[^\w\u00C0-\u017F])((?:[12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)?Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))\.?(?:\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?(?:\s*[-–—]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?)?(?:\s*[\|;]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?(?:\s*[-–—]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?)?)*))(?:(?=[^\w\u00C0-\u017F])|$)/g,
-	forditasok = [ 'KNB', 'SZIT', 'KG', 'UF', 'RUF', 'BD' ],
+    regexp = /(?:^|[^\w\u00C0-\u017F])((?:[12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)?Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))\.?(?:\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?(?:\s*[-–—]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?)?(?:\s*[\|;]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?(?:\s*[-–—]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?)?)*))(?:(?=[^\w\u00C0-\u017F])|$)/g,
+    forditasok = [ 'KNB', 'SZIT', 'KG', 'UF', 'RUF', 'BD' ],
         // API URL
-        url = 'http://szentiras.hu/',
-	api = url + 'api/idezet/',
+        url = '//szentiras.hu/',
+        api = url + 'api/idezet/',
         // tooltip elemei
         tooltip, szoveg, igehely, forditasSelect,
         // timeoutok
@@ -48,7 +48,7 @@ var Szentiras = (function () {
     // IE8 indexof: http://stackoverflow.com/a/3629211/318508
     if (!Array.prototype.indexOf) {
         Array.prototype.indexOf = function (elt) {
-			var len = this.length >>> 0, from = 0;
+            var len = this.length >>> 0, from = 0;
             for (; from < len; from++) {
                 if (from in this && this[from] === elt)
                     return from;
@@ -93,40 +93,40 @@ var Szentiras = (function () {
     // A hivatkozásokat linkekre cseréli
     function csere(match) {
         var a = d.createElement('a'),
-		ref = encodeURI(match[1].replace(/\s/g, ""));
-		
+        ref = encodeURI(match[1].replace(/\s/g, ""));
+        
         a.className += ' ige-link';
-		// Az oldalba az eredeti szöveget tesszük vissza
-		a.appendChild(d.createTextNode(match[0]));
-		// A tooltipen csak a hivatkozás lesz rajta
-		a.setAttribute("data-ige", match[1]);
-		// Betöltéshez az URL formát használjuk
-		a.setAttribute("data-ref", ref);
-		
+        // Az oldalba az eredeti szöveget tesszük vissza
+        a.appendChild(d.createTextNode(match[0]));
+        // A tooltipen csak a hivatkozás lesz rajta
+        a.setAttribute("data-ige", match[1]);
+        // Betöltéshez az URL formát használjuk
+        a.setAttribute("data-ref", ref);
+        
         a.target = '_blank';
-		a.href = url + forditas + '/' + ref;
+        a.href = url + forditas + '/' + ref;
 
-		a.onmouseover = function(event) {
-			// ha rámutatunk egy hivatkozásra, akkor új tooltipet jelenítünk meg
-			clearTimeout(linkTimeout);
-			clearTimeout(tipTimeout);
-			hideTooltip();
-			fillTooltip(a);
-			linkTimeout = setTimeout(function() {
-				tooltip.style.display = 'block';
-				szoveg.scrollTop = 0;
-			}, config.tipShow);
-		};
-		a.onmouseout = function() {
-			// ha elvisszük az egeret a hivatkozásról, akkor elrejtjük a tooltipet
-			clearTimeout(linkTimeout);
-			if (tooltip) {
-				clearTimeout(tipTimeout);
-				tipTimeout = setTimeout(function() {
-					hideTooltip();
-				}, config.tipHide);
-			}
-		};
+        a.onmouseover = function(event) {
+            // ha rámutatunk egy hivatkozásra, akkor új tooltipet jelenítünk meg
+            clearTimeout(linkTimeout);
+            clearTimeout(tipTimeout);
+            hideTooltip();
+            fillTooltip(a);
+            linkTimeout = setTimeout(function() {
+                tooltip.style.display = 'block';
+                szoveg.scrollTop = 0;
+            }, config.tipShow);
+        };
+        a.onmouseout = function() {
+            // ha elvisszük az egeret a hivatkozásról, akkor elrejtjük a tooltipet
+            clearTimeout(linkTimeout);
+            if (tooltip) {
+                clearTimeout(tipTimeout);
+                tipTimeout = setTimeout(function() {
+                    hideTooltip();
+                }, config.tipHide);
+            }
+        };
         return a;
     }
 
@@ -194,8 +194,8 @@ var Szentiras = (function () {
                 if (json.valasz.hiba) {
                     setText(szoveg, json.valasz.hiba);
                 }
-				else if (json.valasz.versek) {
-					if(json.valasz.versek.length) {				
+                else if (json.valasz.versek) {
+                    if(json.valasz.versek.length) {				
                     var versek = json.valasz.versek;
                     // #if FIREFOX
                     addContent(versek);
@@ -220,24 +220,24 @@ var Szentiras = (function () {
                         result += vers + ' ';
                     }
                     szoveg.innerHTML = result;
-	
+    
                     cache[forditas] || (cache[forditas] = {});
                     cache[forditas][ige] = result;
                     // #endif !FIREFOX
                     szoveg.scrollTop = 0;
                     return;
                 }
-					else{
-						setText(szoveg, 'Nem található a kért szöveg, talán egy másik fordításban?');
-						return;
-					}
-				}
+                    else{
+                        setText(szoveg, 'Nem található a kért szöveg, talán egy másik fordításban?');
+                        return;
+                    }
+                }
             }
         }
         catch (ex) {
             console && console.log && console.log(ex.message);
         }
-		setText(szoveg, 'Valami baj van a szöveggel...');
+        setText(szoveg, 'Valami baj van a szöveggel...');
     }
 
     // #if FIREFOX
@@ -359,7 +359,7 @@ var Szentiras = (function () {
             fetch();
         };
 
-		forras = d.createElement('a'), forras.href = url, forras.target = '_blank', setText(forras, 'szentiras.hu »');
+        forras = d.createElement('a'), forras.href = url, forras.target = '_blank', setText(forras, 'szentiras.hu »');
         span = d.createElement('span'), span.appendChild(forras);
 
         footer.appendChild(span);
@@ -380,14 +380,14 @@ var Szentiras = (function () {
     }
 
     function fillTooltip(a) {
-		var hivatkozas = a.getAttribute("data-ige"),
-		hivatkozasUrl = a.getAttribute("data-ref"),
+        var hivatkozas = a.getAttribute("data-ige"),
+        hivatkozasUrl = a.getAttribute("data-ref"),
             position = a.getBoundingClientRect(),
             offset = calculateOffset(a),
             screenW = b.clientWidth || window.innerWidth,
             triggerH = a.offsetHeight;
 
-		igehely.href = a.href;
+        igehely.href = a.href;
         setText(igehely, hivatkozas);
 
         setText(szoveg, "Betöltés...");
