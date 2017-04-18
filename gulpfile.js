@@ -12,9 +12,11 @@ const crx = require("gulp-crx-pack");
 
 const debug = require("gulp-debug");
 
+const mainFile = "igemutato.js";
+
 // COMMON TASKS
 
-const extensionsDir = "extensions";
+const extensionsDir = "extensions/";
 
 gulp.task("minify-css", function () {
     return gulp.src("igemutato.css")
@@ -28,39 +30,39 @@ gulp.task("build", ["build-chrome"/*, "firefox", "web", "wordpress"*/]);
 
 // CHROME
 
-const chromeDir = "chrome";
+const chromeDir = "chrome/";
 
 gulp.task("clean-chrome", function () {
     return del([
         "chrome.crx"
-        , chromeDir + "/igemutato.js"
-        , chromeDir + "/igemutato.min.js"
-        , chromeDir + "/igemutato.min.css"
-        , extensionsDir + "/chrome.crx"
+        , chromeDir + mainFile
+        , chromeDir + "igemutato.min.js"
+        , chromeDir + "igemutato.min.css"
+        , extensionsDir + "chrome.crx"
     ]);
 });
 
 gulp.task("transform-js-chrome", function (callback) {
-    return run("powershell -ExecutionPolicy Bypass -File build/stripregions.ps1 igemutato.js " + chromeDir + "/igemutato.js CHROME").exec();
+    return run("powershell -ExecutionPolicy Bypass -File build/stripregions.ps1 " + mainFile + " " + chromeDir + mainFile + " CHROME").exec();
 });
 
 gulp.task("minify-js-chrome", ["transform-js-chrome"], function () {
-    return gulp.src(chromeDir + "/igemutato.js")
+    return gulp.src(chromeDir + mainFile)
         .pipe(uglify())
         .pipe(rename("igemutato.min.js"))
         .pipe(gulp.dest(chromeDir));
 });
 
 gulp.task("prepare-chrome", ["minify-css", "minify-js-chrome"], function () {
-    del.sync([chromeDir + "/igemutato.js"]);
-    return gulp.src(extensionsDir + "/igemutato.min.css")
+    del.sync([chromeDir + mainFile]);
+    return gulp.src(extensionsDir + "igemutato.min.css")
         .pipe(gulp.dest(chromeDir));
 });
 
 gulp.task("package-chrome", ["prepare-chrome"], function () {
     return gulp.src(chromeDir)
         .pipe(crx({
-            privateKey: fs.readFileSync(extensionsDir + "/igemutato.pem", "utf8"),
+            privateKey: fs.readFileSync(extensionsDir + "igemutato.pem", "utf8"),
             filename: "chrome.crx"
         }))
         .pipe(gulp.dest(extensionsDir));
