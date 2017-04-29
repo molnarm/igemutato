@@ -16,7 +16,9 @@
 						<option value="KNB" <?php selected($options['forditas'], 'KNB', true);?>>Káldi-Neovulgáta (katolikus)</option>
 						<option value="SZIT" <?php selected($options['forditas'], 'SZIT', true);?>>Szent István Társulati Biblia (katolikus)</option>
 						<option value="KG" <?php selected($options['forditas'], 'KG', true);?>>Károli Gáspár revideált fordítása (protestáns)</option>
-						<option value="UF" <?php selected($options['forditas'], 'UF', true);?>>Magyar Bibliatársulat újfordítású Bibliája (protestáns)</option>
+						<option value="UF" <?php selected($options['forditas'], 'UF', true);?>>Magyar Bibliatársulat újfordítású Bibliája 1990 (protestáns)</option>
+						<option value="RUF" <?php selected($options['forditas'], 'RUF', true);?>>Magyar Bibliatársulat újfordítású Bibliája 2014 (protestáns)</option>
+						<option value="BD" <?php selected($options['forditas'], 'BD', true);?>>Békés-Dalos Újszövetség</option>
 					</select>
 					<span class="description">Ebből a fordításból jelennek meg az idézett szövegek.</span>
 				</td>
