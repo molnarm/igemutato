@@ -77,6 +77,7 @@ a.ige-link, a.ige-link:hover {
 
 .igemutato-igehely select {
     font-size: 10px;
+    height:16px;
     margin: 2px;
     border: 1px solid #ccc;
 }
