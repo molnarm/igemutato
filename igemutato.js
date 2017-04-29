@@ -321,8 +321,8 @@ var Szentiras = (function () {
         var footer, left, forras, span, option;
 
         tooltip = d.createElement('div'),
-            szoveg = d.createElement('div'), szoveg.className += 'szoveg', tooltip.appendChild(szoveg),
-            footer = d.createElement('div'), footer.className += 'igehely', tooltip.appendChild(footer);
+            szoveg = d.createElement('div'), szoveg.className += 'igemutato-szoveg', tooltip.appendChild(szoveg),
+            footer = d.createElement('div'), footer.className += 'igemutato-igehely', tooltip.appendChild(footer);
 
         tooltip.id = "igemutato-tooltip";
         // amíg a tooltipen van az egér, addig marad megjelenítve
