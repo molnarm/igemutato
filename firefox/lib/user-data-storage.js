@@ -36,7 +36,7 @@ function validateOptions(prefs) {
     prefs.tipShow = (isNaN(tipShow) || tipShow < 0) ? defaults.tipShow : tipShow;
     prefs.tipHide = (isNaN(tipHide) || tipHide < 0) ? defaults.tipHide : tipHide;
     prefs.fontSize = (isNaN(fontSize) || fontSize < 5) ? defaults.fontSize : fontSize;
-    prefs.forditas = (['SZIT', 'KNB', 'KG', 'UF'].indexOf(forditas) == -1) ? defaults.forditas : forditas;
+    prefs.forditas = (['SZIT', 'KNB', 'KG', 'UF', 'RUF', 'BD'].indexOf(forditas) == -1) ? defaults.forditas : forditas;
     if (prefs.enableFormatting === undefined) prefs.enableFormatting = defaults.enableFormatting;
     if (prefs.showNumbers === undefined) prefs.showNumbers = defaults.showNumbers;
 }
