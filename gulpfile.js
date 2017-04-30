@@ -12,6 +12,11 @@ const debug = require("gulp-debug");
 
 // PATHS
 
+const sources = "src/";
+const output = "build/";
+const packages = "packages/";
+const allFiles = "**/*"
+
 const mainJsFile = "igemutato.js";
 const minMainJsFile = "igemutato.min.js";
 const cssFile = "igemutato.css";
@@ -26,55 +31,53 @@ const firefoxWebExtensionDir = firefoxDir + "webextension/";
 
 const webDir = "web/";
 
-const wordPressDir = "wordpress/igemutato/";
+const wordPressDir = "wordpress/";
 
 // COMMON TASKS
 
-const extensionsDir = "extensions/";
-
 gulp.task("minify-css", function () {
-    return gulp.src(cssFile)
+    return gulp.src(sources + cssFile)
         .pipe(cleanCss({ compatibility: "ie8" }))
         .pipe(rename(minCssFile))
-        .pipe(gulp.dest(extensionsDir));
+        .pipe(gulp.dest(output));
 });
 
-gulp.task("clean", ["clean-chrome", "clean-firefox", "clean-web", "clean-wordpress"]);
+gulp.task("clean", ["clean-chrome", "clean-firefox", "clean-web", "clean-wordpress"], function () {
+    del(output + allFiles);
+});
 gulp.task("build", ["build-chrome", "build-firefox", "build-web", "build-wordpress"]);
 
 // CHROME
 
 gulp.task("clean-chrome", function () {
-    return del([
-        chromeCrxFile
-        , chromeDir + mainJsFile
-        , chromeDir + minMainJsFile
-        , chromeDir + minCssFile
-        , extensionsDir + chromeCrxFile
-    ]);
+    return del(output + chromeDir);
 });
 
-gulp.task("transform-js-chrome", function () {
-    return transformJs(chromeDir + mainJsFile, "CHROME");
+gulp.task("copy-src-chrome", function () {
+    return gulp.src(sources + chromeDir + "**/!(*.pem)")
+        .pipe(gulp.dest(output + chromeDir));
+});
+
+gulp.task("transform-js-chrome", ["copy-src-chrome"], function () {
+    return transformJs(output + chromeDir + mainJsFile, "CHROME");
 });
 
 gulp.task("minify-js-chrome", ["transform-js-chrome"], function () {
-    return minifyJs(chromeDir, chromeDir);
+    return minifyJs(output + chromeDir);
 });
 
 gulp.task("prepare-chrome", ["minify-css", "minify-js-chrome"], function () {
-    del.sync([chromeDir + mainJsFile]);
-    return gulp.src(extensionsDir + minCssFile)
-        .pipe(gulp.dest(chromeDir));
+    return gulp.src(output + minCssFile)
+        .pipe(gulp.dest(output + chromeDir));
 });
 
 gulp.task("package-chrome", ["prepare-chrome"], function () {
-    return gulp.src(chromeDir)
+    return gulp.src(output + chromeDir)
         .pipe(crx({
-            privateKey: fs.readFileSync(extensionsDir + "igemutato.pem", "utf8"),
+            privateKey: fs.readFileSync(sources + chromeDir + "igemutato.pem", "utf8"),
             filename: chromeCrxFile
         }))
-        .pipe(gulp.dest(extensionsDir));
+        .pipe(gulp.dest(packages));
 });
 
 gulp.task("build-chrome", ["package-chrome"]);
@@ -82,32 +85,32 @@ gulp.task("build-chrome", ["package-chrome"]);
 // FIREFOX
 
 gulp.task("clean-firefox", function () {
-    return del([
-        , firefoxWebExtensionDir + minMainJsFile
-        , firefoxWebExtensionDir + minCssFile
-        , extensionsDir + firefoxXpiFile
-    ]);
+    return del(output + firefoxDir);
 });
 
-gulp.task("transform-js-firefox", function () {
+gulp.task("copy-src-firefox", function () {
+    return gulp.src(sources + firefoxDir + allFiles)
+        .pipe(gulp.dest(output + firefoxDir));
+});
+
+gulp.task("transform-js-firefox", ["copy-src-firefox"], function () {
     // Firefox JS file is not minified (because of reviewing process)
-    return transformJs(firefoxWebExtensionDir + minMainJsFile, "FIREFOX");
+    return transformJs(output + firefoxWebExtensionDir + minMainJsFile, "FIREFOX");
 });
 
 gulp.task("prepare-firefox", ["minify-css", "transform-js-firefox"], function () {
-    return gulp.src(extensionsDir + minCssFile)
-        .pipe(gulp.dest(firefoxWebExtensionDir));
+    return gulp.src(output + minCssFile)
+        .pipe(gulp.dest(output + firefoxWebExtensionDir));
 });
 
 gulp.task("package-firefox", ["prepare-firefox"], function () {
-    del.sync(firefoxDir + "*.xpi");
-    process.chdir(firefoxDir);
+    process.chdir(output + firefoxDir);
     exec("jpm xpi");
-    process.chdir("..");
-    gulp.src(firefoxDir + "*.xpi")
+    process.chdir(__dirname);
+    gulp.src(output + firefoxDir + "*.xpi")
         .pipe(rename(firefoxXpiFile))
-        .pipe(gulp.dest(extensionsDir));
-    del(firefoxDir + "*.xpi");
+        .pipe(gulp.dest(packages));
+    del(output + firefoxDir + "*.xpi");
 });
 
 gulp.task("build-firefox", ["package-firefox"]);
@@ -115,60 +118,61 @@ gulp.task("build-firefox", ["package-firefox"]);
 // WEB
 
 gulp.task("clean-web", function () {
-    return del([
-        , webDir + mainJsFile
-        , webDir + minMainJsFile
-        , webDir + minCssFile
-    ]);
+    return del(output + webDir);
 });
 
-gulp.task("transform-js-web", function () {
-    return transformJs(webDir + mainJsFile, "EMBEDDED");
+gulp.task("copy-src-web", function () {
+    return gulp.src(sources + webDir + allFiles)
+        .pipe(gulp.dest(output + webDir));
+});
+
+gulp.task("transform-js-web", ["copy-src-web"], function () {
+    return transformJs(output + webDir + mainJsFile, "EMBEDDED");
 });
 
 gulp.task("minify-js-web", ["transform-js-web"], function () {
-    return minifyJs(webDir, webDir);
+    return minifyJs(output + webDir);
 });
 
 gulp.task("build-web", ["minify-css", "minify-js-web"], function () {
-    del.sync([webDir + mainJsFile]);
-    return gulp.src(extensionsDir + minCssFile)
-        .pipe(gulp.dest(webDir));
+    return gulp.src(output + minCssFile)
+        .pipe(gulp.dest(output + webDir));
 });
 
 // WORDPRESS
 
 gulp.task("clean-wordpress", function () {
-    return del([
-        , wordPressDir + mainJsFile
-        , wordPressDir + minMainJsFile
-        , wordPressDir + minCssFile
-    ]);
+    return del(output + wordPressDir);
 });
 
-gulp.task("transform-js-wordpress", function () {
-    return transformJs(wordPressDir + mainJsFile, "WORDPRESS");
+gulp.task("copy-src-wordpress", function () {
+    return gulp.src(sources + wordPressDir + allFiles)
+        .pipe(gulp.dest(output + wordPressDir));
+});
+
+gulp.task("transform-js-wordpress", ["copy-src-wordpress"], function () {
+    return transformJs(output + wordPressDir + mainJsFile, "WORDPRESS");
 });
 
 gulp.task("minify-js-wordpress", ["transform-js-wordpress"], function () {
-    return minifyJs(wordPressDir, wordPressDir);
+    return minifyJs(output + wordPressDir);
 });
 
 gulp.task("build-wordpress", ["minify-css", "minify-js-wordpress"], function () {
-    del.sync([wordPressDir + mainJsFile]);
-    return gulp.src(extensionsDir + minCssFile)
-        .pipe(gulp.dest(wordPressDir));
+    return gulp.src(output + minCssFile)
+        .pipe(gulp.dest(output + wordPressDir));
 });
 
 // UTILITIES
 
 function transformJs(destFile, variant) {
-    return exec("powershell -ExecutionPolicy Bypass -File tools/stripregions.ps1 " + mainJsFile + " " + destFile + " " + variant);
+    return exec("powershell -ExecutionPolicy Bypass -File tools/stripregions.ps1 " + sources + mainJsFile + " " + destFile + " " + variant);
 }
 
-function minifyJs(srcDir, destDir) {
-    return gulp.src(srcDir + mainJsFile)
+function minifyJs(dir) {
+    gulp.src(dir + mainJsFile)
         .pipe(uglify())
         .pipe(rename(minMainJsFile))
-        .pipe(gulp.dest(destDir));
+        .pipe(gulp.dest(dir));
+    del(dir + mainJsFile);
 }

@@ -1,7 +1,9 @@
-/szentiras.php
 /.git
 /wordpress-svn/
 /.vs
 /node_modules
 /todo.txt
 /igemutato.sln
+src/chrome/igemutato.pem
+/packages
+/build
