@@ -24,6 +24,10 @@ const firefoxDir = "firefox/";
 const firefoxXpiFile = "firefox.xpi";
 const firefoxWebExtensionDir = firefoxDir + "webextension/";
 
+const webDir = "web/";
+
+const wordPressDir = "wordpress/igemutato/";
+
 // COMMON TASKS
 
 const extensionsDir = "extensions/";
@@ -35,8 +39,8 @@ gulp.task("minify-css", function () {
         .pipe(gulp.dest(extensionsDir));
 });
 
-gulp.task("clean", ["clean-chrome", "clean-firefox"]);
-gulp.task("build", ["build-chrome", "build-firefox" /**, "web", "wordpress"*/]);
+gulp.task("clean", ["clean-chrome", "clean-firefox", "clean-web", "clean-wordpress"]);
+gulp.task("build", ["build-chrome", "build-firefox", "build-web", "build-wordpress"]);
 
 // CHROME
 
@@ -51,7 +55,7 @@ gulp.task("clean-chrome", function () {
 });
 
 gulp.task("transform-js-chrome", function () {
-    return exec("powershell -ExecutionPolicy Bypass -File build/stripregions.ps1 " + mainJsFile + " " + chromeDir + mainJsFile + " CHROME");
+    return transformJs(chromeDir + mainJsFile, "CHROME");
 });
 
 gulp.task("minify-js-chrome", ["transform-js-chrome"], function () {
@@ -87,7 +91,7 @@ gulp.task("clean-firefox", function () {
 
 gulp.task("transform-js-firefox", function () {
     // Firefox JS file is not minified (because of reviewing process)
-    return exec("powershell -ExecutionPolicy Bypass -File build/stripregions.ps1 " + mainJsFile + " " + firefoxWebExtensionDir + minMainJsFile + " FIREFOX");
+    return transformJs(firefoxWebExtensionDir + minMainJsFile, "FIREFOX");
 });
 
 gulp.task("prepare-firefox", ["minify-css", "transform-js-firefox"], function () {
@@ -108,7 +112,59 @@ gulp.task("package-firefox", ["prepare-firefox"], function () {
 
 gulp.task("build-firefox", ["package-firefox"]);
 
+// WEB
+
+gulp.task("clean-web", function () {
+    return del([
+        , webDir + mainJsFile
+        , webDir + minMainJsFile
+        , webDir + minCssFile
+    ]);
+});
+
+gulp.task("transform-js-web", function () {
+    return transformJs(webDir + mainJsFile, "EMBEDDED");
+});
+
+gulp.task("minify-js-web", ["transform-js-web"], function () {
+    return minifyJs(webDir, webDir);
+});
+
+gulp.task("build-web", ["minify-css", "minify-js-web"], function () {
+    del.sync([webDir + mainJsFile]);
+    return gulp.src(extensionsDir + minCssFile)
+        .pipe(gulp.dest(webDir));
+});
+
+// WORDPRESS
+
+gulp.task("clean-wordpress", function () {
+    return del([
+        , wordPressDir + mainJsFile
+        , wordPressDir + minMainJsFile
+        , wordPressDir + minCssFile
+    ]);
+});
+
+gulp.task("transform-js-wordpress", function () {
+    return transformJs(wordPressDir + mainJsFile, "WORDPRESS");
+});
+
+gulp.task("minify-js-wordpress", ["transform-js-wordpress"], function () {
+    return minifyJs(wordPressDir, wordPressDir);
+});
+
+gulp.task("build-wordpress", ["minify-css", "minify-js-wordpress"], function () {
+    del.sync([wordPressDir + mainJsFile]);
+    return gulp.src(extensionsDir + minCssFile)
+        .pipe(gulp.dest(wordPressDir));
+});
+
 // UTILITIES
+
+function transformJs(destFile, variant) {
+    return exec("powershell -ExecutionPolicy Bypass -File build/stripregions.ps1 " + mainJsFile + " " + destFile + " " + variant);
+}
 
 function minifyJs(srcDir, destDir) {
     return gulp.src(srcDir + mainJsFile)
