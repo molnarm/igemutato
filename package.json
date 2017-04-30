@@ -6,7 +6,7 @@
     "gulp-crx-pack": "^1.0.1",
     "gulp-debug": "^3.1.0",
     "gulp-rename": "^1.2.2",
-    "gulp-run": "^1.7.1",
-    "gulp-uglify": "^2.1.2"
+    "gulp-uglify": "^2.1.2",
+    "sync-exec": "^0.6.2"
   }
 }
