@@ -163,7 +163,7 @@ gulp.task("build-wordpress", ["minify-css", "minify-js-wordpress"], function () 
 // UTILITIES
 
 function transformJs(destFile, variant) {
-    return exec("powershell -ExecutionPolicy Bypass -File build/stripregions.ps1 " + mainJsFile + " " + destFile + " " + variant);
+    return exec("powershell -ExecutionPolicy Bypass -File tools/stripregions.ps1 " + mainJsFile + " " + destFile + " " + variant);
 }
 
 function minifyJs(srcDir, destDir) {
