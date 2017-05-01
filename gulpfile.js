@@ -7,6 +7,7 @@ const del = require("del");
 const exec = require('sync-exec');
 const fs = require("fs");
 const crx = require("gulp-crx-pack");
+const zip = require("gulp-zip");
 
 const debug = require("gulp-debug");
 
@@ -44,8 +45,11 @@ gulp.task("minify-css", function () {
 
 gulp.task("clean", ["clean-chrome", "clean-firefox", "clean-web", "clean-wordpress"], function () {
     del(output + allFiles);
+    del(packages + allFiles);
 });
 gulp.task("build", ["build-chrome", "build-firefox", "build-web", "build-wordpress"]);
+
+gulp.task("release", ["release-chrome", "release-firefox", "release-web", "release-wordpress"]);
 
 // CHROME
 
@@ -71,7 +75,7 @@ gulp.task("prepare-chrome", ["minify-css", "minify-js-chrome"], function () {
         .pipe(gulp.dest(output + chromeDir));
 });
 
-gulp.task("package-chrome", ["prepare-chrome"], function () {
+gulp.task("build-chrome", ["prepare-chrome"], function () {
     return gulp.src(output + chromeDir)
         .pipe(crx({
             privateKey: fs.readFileSync(sources + chromeDir + "igemutato.pem", "utf8"),
@@ -80,7 +84,11 @@ gulp.task("package-chrome", ["prepare-chrome"], function () {
         .pipe(gulp.dest(packages));
 });
 
-gulp.task("build-chrome", ["package-chrome"]);
+gulp.task("release-chrome", ["prepare-chrome"], function () {
+    return gulp.src(output + chromeDir + allFiles)
+        .pipe(zip('chrome.zip'))
+        .pipe(gulp.dest(packages));
+});
 
 // FIREFOX
 
@@ -103,7 +111,7 @@ gulp.task("prepare-firefox", ["minify-css", "transform-js-firefox"], function ()
         .pipe(gulp.dest(output + firefoxWebExtensionDir));
 });
 
-gulp.task("package-firefox", ["prepare-firefox"], function () {
+gulp.task("build-firefox", ["prepare-firefox"], function () {
     process.chdir(output + firefoxDir);
     exec("jpm xpi");
     process.chdir(__dirname);
@@ -113,7 +121,7 @@ gulp.task("package-firefox", ["prepare-firefox"], function () {
     del(output + firefoxDir + "*.xpi");
 });
 
-gulp.task("build-firefox", ["package-firefox"]);
+gulp.task("release-firefox", ["build-firefox"]);
 
 // WEB
 
@@ -139,6 +147,8 @@ gulp.task("build-web", ["minify-css", "minify-js-web"], function () {
         .pipe(gulp.dest(output + webDir));
 });
 
+gulp.task("release-web", ["build-web"]);
+
 // WORDPRESS
 
 gulp.task("clean-wordpress", function () {
@@ -158,10 +168,18 @@ gulp.task("minify-js-wordpress", ["transform-js-wordpress"], function () {
     return minifyJs(output + wordPressDir);
 });
 
-gulp.task("build-wordpress", ["minify-css", "minify-js-wordpress"], function () {
+gulp.task("prepare-wordpress", ["minify-css", "minify-js-wordpress"], function () {
     return gulp.src(output + minCssFile)
         .pipe(gulp.dest(output + wordPressDir));
 });
+
+gulp.task("build-wordpress", ["prepare-wordpress"], function () {
+    return gulp.src(output + wordPressDir + allFiles)
+        .pipe(zip('wordpress.zip'))
+        .pipe(gulp.dest(packages));
+});
+
+gulp.task("release-wordpress", ["build-wordpress"]);
 
 // UTILITIES
 
