@@ -16,11 +16,11 @@
   "content_scripts": [
     {
       "matches": [ "http://*/*", "https://*/*" ],
-      "js": [ "igemutato.min.js", "content.js" ],
+      "js": [ "igemutato.js", "content.js" ],
       "all_frames": true
     }
   ],
   "web_accessible_resources": [
-    "igemutato.min.css"
+    "igemutato.css"
   ]
 }

@@ -450,7 +450,7 @@ var Szentiras = (function () {
         css.setAttribute("rel", "stylesheet");
         css.setAttribute("type", "text/css");
         // #if CHROME
-        css.setAttribute("href", chrome.extension.getURL('igemutato.min.css'));
+        css.setAttribute("href", chrome.extension.getURL('igemutato.css'));
         // #endif CHROME
         // #if FIREFOX
         css.setAttribute("href", config.firefoxCSS);

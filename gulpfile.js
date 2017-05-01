@@ -36,8 +36,9 @@ const wordPressDir = "wordpress/";
 
 // COMMON TASKS
 
-gulp.task("minify-css", function () {
+gulp.task("copy-css", function () {
     return gulp.src(sources + cssFile)
+        .pipe(gulp.dest(output))
         .pipe(cleanCss({ compatibility: "ie8" }))
         .pipe(rename(minCssFile))
         .pipe(gulp.dest(output));
@@ -66,12 +67,8 @@ gulp.task("transform-js-chrome", ["copy-src-chrome"], function () {
     return transformJs(output + chromeDir + mainJsFile, "CHROME");
 });
 
-gulp.task("minify-js-chrome", ["transform-js-chrome"], function () {
-    return minifyJs(output + chromeDir);
-});
-
-gulp.task("prepare-chrome", ["minify-css", "minify-js-chrome"], function () {
-    return gulp.src(output + minCssFile)
+gulp.task("prepare-chrome", ["copy-css", "transform-js-chrome"], function () {
+    return gulp.src(output + cssFile)
         .pipe(gulp.dest(output + chromeDir));
 });
 
@@ -102,12 +99,11 @@ gulp.task("copy-src-firefox", function () {
 });
 
 gulp.task("transform-js-firefox", ["copy-src-firefox"], function () {
-    // Firefox JS file is not minified (because of reviewing process)
-    return transformJs(output + firefoxWebExtensionDir + minMainJsFile, "FIREFOX");
+    return transformJs(output + firefoxWebExtensionDir + mainJsFile, "FIREFOX");
 });
 
-gulp.task("prepare-firefox", ["minify-css", "transform-js-firefox"], function () {
-    return gulp.src(output + minCssFile)
+gulp.task("prepare-firefox", ["copy-css", "transform-js-firefox"], function () {
+    return gulp.src(output + cssFile)
         .pipe(gulp.dest(output + firefoxWebExtensionDir));
 });
 
@@ -142,7 +138,7 @@ gulp.task("minify-js-web", ["transform-js-web"], function () {
     return minifyJs(output + webDir);
 });
 
-gulp.task("build-web", ["minify-css", "minify-js-web"], function () {
+gulp.task("build-web", ["copy-css", "minify-js-web"], function () {
     return gulp.src(output + minCssFile)
         .pipe(gulp.dest(output + webDir));
 });
@@ -168,7 +164,7 @@ gulp.task("minify-js-wordpress", ["transform-js-wordpress"], function () {
     return minifyJs(output + wordPressDir);
 });
 
-gulp.task("prepare-wordpress", ["minify-css", "minify-js-wordpress"], function () {
+gulp.task("prepare-wordpress", ["copy-css", "minify-js-wordpress"], function () {
     return gulp.src(output + minCssFile)
         .pipe(gulp.dest(output + wordPressDir));
 });
