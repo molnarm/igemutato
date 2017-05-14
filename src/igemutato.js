@@ -39,25 +39,7 @@ var Szentiras = (function () {
         // DOM elemek
         d = document, b = d.body, e = d.documentElement,
         // kizárt elemek
-        excludes,
-        // facepalm
-        ie8;
-
-    // #if !CHROME
-    // #if !FIREFOX
-    // IE8 indexof: http://stackoverflow.com/a/3629211/318508
-    if (!Array.prototype.indexOf) {
-        Array.prototype.indexOf = function (elt) {
-            var len = this.length >>> 0, from = 0;
-            for (; from < len; from++) {
-                if (from in this && this[from] === elt)
-                    return from;
-            }
-            return -1;
-        };
-    }
-    // #endif !FIREFOX
-    // #endif !CHROME
+        excludes;
 
     // Megkeresi a hivatkozásokat az oldalban
     // (valaha ez volt a [hibás] kiindulás: http://stackoverflow.com/a/2848304/318508)
@@ -151,12 +133,7 @@ var Szentiras = (function () {
         xmlhttp && xmlhttp.abort();
 
         if (cache[forditas] && cache[forditas][ige]) {
-            // #if FIREFOX
             addContent(cache[forditas][ige]);
-            // #endif FIREFOX
-            // #if !FIREFOX
-            szoveg.innerHTML = cache[forditas][ige];
-            // #endif !FIREFOX
             szoveg.scrollTop = 0;
             return;
         }
@@ -197,33 +174,9 @@ var Szentiras = (function () {
                 else if (json.valasz.versek) {
                     if (json.valasz.versek.length) {
                         var versek = json.valasz.versek;
-                        // #if FIREFOX
                         addContent(versek);
                         cache[forditas] || (cache[forditas] = {});
                         cache[forditas][ige] = versek;
-                        // #endif FIREFOX
-                        // #if !FIREFOX
-                        var result = '', vers, fejezet = 0, szamok;
-                        for (var i = 0; i < versek.length; i++) {
-                            vers = versek[i].szoveg;
-                            if (!ie8) vers = vers.trim(); // :-(
-                            if (!config.enableFormatting)
-                                vers = vers.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
-                            if (config.showNumbers) {
-                                szamok = versszam(versek[i]);
-                                vers = '<sup>' + szamok.vers + '</sup>' + vers;
-                                if (szamok.fejezet != fejezet) {
-                                    vers = '<span class="konyv">' + szamok.fejezet + '</span>&nbsp;' + vers;
-                                    fejezet = szamok.fejezet;
-                                }
-                            }
-                            result += vers + ' ';
-                        }
-                        szoveg.innerHTML = result;
-
-                        cache[forditas] || (cache[forditas] = {});
-                        cache[forditas][ige] = result;
-                        // #endif !FIREFOX
                         szoveg.scrollTop = 0;
                         return;
                     }
@@ -239,8 +192,7 @@ var Szentiras = (function () {
         }
         setText(szoveg, 'Valami baj van a szöveggel...');
     }
-
-    // #if FIREFOX
+    
     function addContent(versek) {
         var domParser = new DOMParser(), i, html, fejezetElem, vers, szamElem, fejezet = 0, szamok;
 
@@ -290,7 +242,6 @@ var Szentiras = (function () {
         }
         while (node = next);
     }
-    // #endif FIREFOX
 
     function versszam(vers) {
         var kod = vers.hely.gepi.toString();
@@ -301,20 +252,7 @@ var Szentiras = (function () {
     }
 
     function setText(element, text) {
-        // #if !FIREFOX
-        // #if !CHROME
-        if (ie8) {
-            element.innerText = text;
-        }
-        else {
-            // #endif !CHROME
-            // #endif !FIREFOX
-            element.textContent = text;
-            // #if !FIREFOX
-            // #if !CHROME
-        }
-        // #endif !CHROME
-        // #endif !FIREFOX
+        element.textContent = text;
     }
 
     function createTooltip() {
@@ -460,8 +398,6 @@ var Szentiras = (function () {
         // #endif EMBEDDED
         d.getElementsByTagName("head")[0].appendChild(css);
         // #endif !WORDPRESS
-        // IE8: http://stackoverflow.com/a/10965073/318508
-        ie8 = (window.attachEvent && !window.addEventListener);
         forditas = config.forditas;
         excludes = config.excludeTags.split(',');
         createTooltip();
