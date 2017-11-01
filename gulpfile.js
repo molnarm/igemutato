@@ -64,7 +64,7 @@ gulp.task("copy-src-chrome", function () {
 });
 
 gulp.task("transform-js-chrome", ["copy-src-chrome"], function () {
-    return transformJs(output + chromeDir + mainJsFile, "CHROME");
+    return transformJs(output + chromeDir + mainJsFile, "BROWSER");
 });
 
 gulp.task("prepare-chrome", ["copy-css", "transform-js-chrome"], function () {
@@ -99,7 +99,7 @@ gulp.task("copy-src-firefox", function () {
 });
 
 gulp.task("transform-js-firefox", ["copy-src-firefox"], function () {
-    return transformJs(output + firefoxWebExtensionDir + mainJsFile, "FIREFOX");
+    return transformJs(output + firefoxWebExtensionDir + mainJsFile, "BROWSER");
 });
 
 gulp.task("prepare-firefox", ["copy-css", "transform-js-firefox"], function () {

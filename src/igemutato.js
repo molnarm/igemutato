@@ -354,8 +354,7 @@ var Szentiras = (function () {
         for (key in options) {
             data[key] = options[key];
         }
-        // #if !FIREFOX
-        // #if !CHROME
+        // #if !BROWSER
         // a bővítményekben már eleve van ellenőrzés
         var tipW = parseInt(data.tipW),
             tipH = parseInt(data.tipH),
@@ -373,8 +372,7 @@ var Szentiras = (function () {
         data.excludeTags = data.excludeTags || config.excludeTags;
         data.enableFormatting = (data.enableFormatting === undefined) ? config.enableFormatting : data.enableFormatting;
         data.showNumbers = (data.showNumbers === undefined) ? config.showNumbers : data.showNumbers;
-        // #endif !CHROME
-        // #endif !FIREFOX
+        // #endif !BROWSER
         config = data;
     }
 
@@ -387,12 +385,9 @@ var Szentiras = (function () {
         var css = d.createElement("link");
         css.setAttribute("rel", "stylesheet");
         css.setAttribute("type", "text/css");
-        // #if CHROME
+        // #if BROWSER
         css.setAttribute("href", chrome.extension.getURL('igemutato.css'));
-        // #endif CHROME
-        // #if FIREFOX
-        css.setAttribute("href", config.firefoxCSS);
-        // #endif FIREFOX
+        // #endif BROWSER
         // #if EMBEDDED
         css.setAttribute("href", 'http://molnarm.github.io/igemutato.min.css');
         // #endif EMBEDDED
@@ -409,9 +404,7 @@ var Szentiras = (function () {
         start: start
     };
 })();
-// #if !CHROME
-// #if !FIREFOX
+// #if !BROWSER
 window.igemutato && window.igemutato.config && Szentiras.setConfig(window.igemutato.config);
 Szentiras.start(document.body);
-// #endif !CHROME
-// #endif !FIREFOX
+// #endif !BROWSER
