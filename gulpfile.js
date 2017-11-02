@@ -23,12 +23,8 @@ const minMainJsFile = "igemutato.min.js";
 const cssFile = "igemutato.css";
 const minCssFile = "igemutato.min.css";
 
-const chromeDir = "chrome/";
-const chromeCrxFile = "chrome.crx";
-
-const firefoxDir = "firefox/";
-const firefoxXpiFile = "firefox.xpi";
-const firefoxWebExtensionDir = firefoxDir + "webextension/";
+const browserDir = "webextension/";
+const browserZipFile = "extension.zip";
 
 const webDir = "web/";
 
@@ -44,80 +40,39 @@ gulp.task("copy-css", function () {
         .pipe(gulp.dest(output));
 });
 
-gulp.task("clean", ["clean-chrome", "clean-firefox", "clean-web", "clean-wordpress"], function () {
+gulp.task("clean", ["clean-browser", "clean-web", "clean-wordpress"], function () {
     del(output + allFiles);
     del(packages + allFiles);
 });
-gulp.task("build", ["build-chrome", "build-firefox", "build-web", "build-wordpress"]);
+gulp.task("build", ["build-browser", "build-web", "build-wordpress"]);
 
-gulp.task("release", ["release-chrome", "release-firefox", "release-web", "release-wordpress"]);
+gulp.task("release", ["release-browser", "release-web", "release-wordpress"]);
 
-// CHROME
+// BROWSER
 
-gulp.task("clean-chrome", function () {
-    return del(output + chromeDir);
+gulp.task("clean-browser", function () {
+    return del(output + browserDir);
 });
 
-gulp.task("copy-src-chrome", function () {
-    return gulp.src(sources + chromeDir + "**/!(*.pem)")
-        .pipe(gulp.dest(output + chromeDir));
+gulp.task("copy-src-browser", function () {
+    return gulp.src(sources + browserDir + allFiles)
+        .pipe(gulp.dest(output + browserDir));
 });
 
-gulp.task("transform-js-chrome", ["copy-src-chrome"], function () {
-    return transformJs(output + chromeDir + mainJsFile, "BROWSER");
+gulp.task("transform-js-browser", ["copy-src-browser"], function () {
+    return transformJs(output + browserDir + mainJsFile, "BROWSER");
 });
 
-gulp.task("prepare-chrome", ["copy-css", "transform-js-chrome"], function () {
+gulp.task("prepare-browser", ["copy-css", "transform-js-browser"], function () {
     return gulp.src(output + cssFile)
-        .pipe(gulp.dest(output + chromeDir));
+        .pipe(gulp.dest(output + browserDir));
 });
-
-gulp.task("build-chrome", ["prepare-chrome"], function () {
-    return gulp.src(output + chromeDir)
-        .pipe(crx({
-            privateKey: fs.readFileSync(sources + chromeDir + "igemutato.pem", "utf8"),
-            filename: chromeCrxFile
-        }))
+gulp.task("build-browser", ["prepare-browser"], function () {
+    return gulp.src(output + browserDir + allFiles)
+        .pipe(zip(browserZipFile))
         .pipe(gulp.dest(packages));
 });
-
-gulp.task("release-chrome", ["prepare-chrome"], function () {
-    return gulp.src(output + chromeDir + allFiles)
-        .pipe(zip('chrome.zip'))
-        .pipe(gulp.dest(packages));
-});
-
-// FIREFOX
-
-gulp.task("clean-firefox", function () {
-    return del(output + firefoxDir);
-});
-
-gulp.task("copy-src-firefox", function () {
-    return gulp.src(sources + firefoxDir + allFiles)
-        .pipe(gulp.dest(output + firefoxDir));
-});
-
-gulp.task("transform-js-firefox", ["copy-src-firefox"], function () {
-    return transformJs(output + firefoxWebExtensionDir + mainJsFile, "BROWSER");
-});
-
-gulp.task("prepare-firefox", ["copy-css", "transform-js-firefox"], function () {
-    return gulp.src(output + cssFile)
-        .pipe(gulp.dest(output + firefoxWebExtensionDir));
-});
-
-gulp.task("build-firefox", ["prepare-firefox"], function () {
-    process.chdir(output + firefoxDir);
-    exec("jpm xpi");
-    process.chdir(__dirname);
-    gulp.src(output + firefoxDir + "*.xpi")
-        .pipe(rename(firefoxXpiFile))
-        .pipe(gulp.dest(packages));
-    del(output + firefoxDir + "*.xpi");
-});
-
-gulp.task("release-firefox", ["build-firefox"]);
+gulp.task("release-browser", ["build-browser"]);
 
 // WEB
 
