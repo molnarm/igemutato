@@ -1,67 +1,70 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>Szentírás beállítások</title>
-<style>
-tr td:first-child{
-	margin-right: 20px;
-	font-weight: bold;
-}
-#status{
-	font-style: italic;
-}
-</style>
+    <meta charset="utf-8">
+    <title>Szentírás beállítások</title>
+    <style>
+        tr td:first-child {
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        #status {
+            font-style: italic;
+        }
+    </style>
 </head>
 
 <body>
-	<table>
-		<tr>
-			<td><label for="forditas">Fordítás:</label></td>
-			<td colspan="2">
-				<select id="forditas">
-					<option value="KNB">Káldi-Neovulgáta (katolikus)</option>
-					<option value="SZIT" selected="selected">Szent István Társulati Biblia (katolikus)</option>
-					<option value="KG">Károli Gáspár revideált fordítása (protestáns)</option>
-					<option value="UF">Magyar Bibliatársulat újfordítású Bibliája 1990 (protestáns)</option>
-					<option value="RUF">Magyar Bibliatársulat újfordítású Bibliája 2014 (protestáns)</option>
-					<option value="BD">Békés-Dalos Újszövetség</option>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td>Felugró ablak méretei (min. 100x50):</td>
-			<td>
-				<label for="tipW">szélesség:</label>&nbsp;<input id="tipW" type="number" min="100" />, 
-				<label for="tipH">magasság:</label>&nbsp;<input id="tipH" type="number" min="50" />
-			</td>
-		</tr>
-		<tr>
-			<td><label for="fontSize">Betűméret:</label></td>
-			<td colspan="2"><input id="fontSize" type="number" min="5" /></td>
-		</tr>
-		<tr>
-			<td>Késleltetések (ezredmásodperc):</td>
-			<td>
-				<label for="tipShow">megjelenítés:</label>&nbsp;<input id="tipShow" type="number" min="0" />, 
-				<label for="tipHide">elrejtés:</label>&nbsp;<input id="tipHide" type="number" min="0" />
-			</td>
-		</tr>
-		<tr>
-			<td><label for="excludeTags">Ezekben az elemekben ne keressen:</label></td>
-			<td colspan="4"><input id="excludeTags" type="text" size="100" /></td>
-		</tr>
-		<tr>
-			<td><label for="enableFormatting">Szövegformázás engedélyezése:</label></td>
-			<td><input id="enableFormatting" type="checkbox" /></td>
-		</tr>
-		<tr>
-			<td><label for="showNumbers">Fejezet- és versszámok megjelenítése:</label></td>
-			<td><input id="showNumbers" type="checkbox" /></td>
-		</tr>
-		<tr>
-			<td><button id="save">Mentés</button></td>
-			<td colspan="3"><span id="status"></span></td>
-		</tr>
-	</table>	
+    <table>
+        <tr>
+            <td><label for="forditas">Fordítás:</label></td>
+            <td colspan="2">
+                <select id="forditas">
+                    <option value="KNB">Káldi-Neovulgáta (katolikus)</option>
+                    <option value="SZIT" selected="selected">Szent István Társulati Biblia (katolikus)</option>
+                    <option value="KG">Károli Gáspár revideált fordítása (protestáns)</option>
+                    <option value="UF">Magyar Bibliatársulat újfordítású Bibliája 1990 (protestáns)</option>
+                    <option value="RUF">Magyar Bibliatársulat újfordítású Bibliája 2014 (protestáns)</option>
+                    <option value="BD">Békés-Dalos Újszövetség</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Felugró ablak méretei (min. 100x50):</td>
+            <td>
+                <label for="tipW">szélesség:</label>&nbsp;<input id="tipW" type="number" min="100" />,
+                <label for="tipH">magasság:</label>&nbsp;<input id="tipH" type="number" min="50" />
+            </td>
+        </tr>
+        <tr>
+            <td><label for="fontSize">Betűméret:</label></td>
+            <td colspan="2"><input id="fontSize" type="number" min="5" /></td>
+        </tr>
+        <tr>
+            <td>Késleltetések (ezredmásodperc):</td>
+            <td>
+                <label for="tipShow">megjelenítés:</label>&nbsp;<input id="tipShow" type="number" min="0" />,
+                <label for="tipHide">elrejtés:</label>&nbsp;<input id="tipHide" type="number" min="0" />
+            </td>
+        </tr>
+        <tr>
+            <td><label for="excludeTags">Ezekben az elemekben ne keressen:</label></td>
+            <td colspan="4"><input id="excludeTags" type="text" size="100" /></td>
+        </tr>
+        <tr>
+            <td><label for="enableFormatting">Szövegformázás engedélyezése:</label></td>
+            <td><input id="enableFormatting" type="checkbox" /></td>
+        </tr>
+        <tr>
+            <td><label for="showNumbers">Fejezet- és versszámok megjelenítése:</label></td>
+            <td><input id="showNumbers" type="checkbox" /></td>
+        </tr>
+        <tr>
+            <td><button id="save">Mentés</button></td>
+            <td colspan="3"><span id="status"></span></td>
+        </tr>
+    </table>
 </body>
 
 <script type="text/javascript" src="options.js"></script>

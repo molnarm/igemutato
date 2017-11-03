@@ -3,10 +3,8 @@ const gulp = require("gulp");
 const uglify = require("gulp-uglify");
 const cleanCss = require("gulp-clean-css");
 const rename = require("gulp-rename");
+var concat = require('gulp-concat');
 const del = require("del");
-const exec = require('sync-exec');
-const fs = require("fs");
-const crx = require("gulp-crx-pack");
 const zip = require("gulp-zip");
 
 const debug = require("gulp-debug");
@@ -16,12 +14,14 @@ const debug = require("gulp-debug");
 const sources = "src/";
 const output = "build/";
 const packages = "packages/";
-const allFiles = "**/*"
+const allFiles = "**/*";
+const notJsFiles = "**/!(*.js)"
 
 const mainJsFile = "igemutato.js";
 const minMainJsFile = "igemutato.min.js";
 const cssFile = "igemutato.css";
 const minCssFile = "igemutato.min.css";
+const startJsFile = "start.js";
 
 const browserDir = "webextension/";
 const browserZipFile = "extension.zip";
@@ -41,12 +41,9 @@ gulp.task("copy-css", function () {
 });
 
 gulp.task("clean", ["clean-browser", "clean-web", "clean-wordpress"], function () {
-    del(output + allFiles);
-    del(packages + allFiles);
+    return del([output + allFiles, packages + allFiles]);
 });
 gulp.task("build", ["build-browser", "build-web", "build-wordpress"]);
-
-gulp.task("release", ["release-browser", "release-web", "release-wordpress"]);
 
 // BROWSER
 
@@ -55,15 +52,11 @@ gulp.task("clean-browser", function () {
 });
 
 gulp.task("copy-src-browser", function () {
-    return gulp.src(sources + browserDir + allFiles)
+    return gulp.src([sources + browserDir + allFiles, sources + mainJsFile])
         .pipe(gulp.dest(output + browserDir));
 });
 
-gulp.task("transform-js-browser", ["copy-src-browser"], function () {
-    return transformJs(output + browserDir + mainJsFile, "BROWSER");
-});
-
-gulp.task("prepare-browser", ["copy-css", "transform-js-browser"], function () {
+gulp.task("prepare-browser", ["copy-css", "copy-src-browser"], function () {
     return gulp.src(output + cssFile)
         .pipe(gulp.dest(output + browserDir));
 });
@@ -72,7 +65,6 @@ gulp.task("build-browser", ["prepare-browser"], function () {
         .pipe(zip(browserZipFile))
         .pipe(gulp.dest(packages));
 });
-gulp.task("release-browser", ["build-browser"]);
 
 // WEB
 
@@ -80,13 +72,10 @@ gulp.task("clean-web", function () {
     return del(output + webDir);
 });
 
-gulp.task("copy-src-web", function () {
-    return gulp.src(sources + webDir + allFiles)
+gulp.task("transform-js-web", function () {
+    return gulp.src([sources + mainJsFile, sources + webDir + startJsFile])
+        .pipe(concat(mainJsFile))
         .pipe(gulp.dest(output + webDir));
-});
-
-gulp.task("transform-js-web", ["copy-src-web"], function () {
-    return transformJs(output + webDir + mainJsFile, "EMBEDDED");
 });
 
 gulp.task("minify-js-web", ["transform-js-web"], function () {
@@ -98,8 +87,6 @@ gulp.task("build-web", ["copy-css", "minify-js-web"], function () {
         .pipe(gulp.dest(output + webDir));
 });
 
-gulp.task("release-web", ["build-web"]);
-
 // WORDPRESS
 
 gulp.task("clean-wordpress", function () {
@@ -107,12 +94,14 @@ gulp.task("clean-wordpress", function () {
 });
 
 gulp.task("copy-src-wordpress", function () {
-    return gulp.src(sources + wordPressDir + allFiles)
+    return gulp.src(sources + wordPressDir + notJsFiles)
         .pipe(gulp.dest(output + wordPressDir));
 });
 
 gulp.task("transform-js-wordpress", ["copy-src-wordpress"], function () {
-    return transformJs(output + wordPressDir + mainJsFile, "WORDPRESS");
+    return gulp.src([sources + mainJsFile, sources + wordPressDir + startJsFile])
+        .pipe(concat(mainJsFile))
+        .pipe(gulp.dest(output + wordPressDir));
 });
 
 gulp.task("minify-js-wordpress", ["transform-js-wordpress"], function () {
@@ -130,13 +119,7 @@ gulp.task("build-wordpress", ["prepare-wordpress"], function () {
         .pipe(gulp.dest(packages));
 });
 
-gulp.task("release-wordpress", ["build-wordpress"]);
-
 // UTILITIES
-
-function transformJs(destFile, variant) {
-    return exec("powershell -ExecutionPolicy Bypass -File tools/stripregions.ps1 " + sources + mainJsFile + " " + destFile + " " + variant);
-}
 
 function minifyJs(dir) {
     gulp.src(dir + mainJsFile)

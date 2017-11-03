@@ -350,49 +350,12 @@ var Szentiras = (function () {
     }
 
     function setConfig(options) {
-        var data = config;
         for (key in options) {
-            data[key] = options[key];
+            config[key] = options[key];
         }
-        // #if !BROWSER
-        // a bővítményekben már eleve van ellenőrzés
-        var tipW = parseInt(data.tipW),
-            tipH = parseInt(data.tipH),
-            fontSize = parseInt(data.fontSize),
-            tipShow = parseInt(data.tipShow),
-            tipHide = parseInt(data.tipHide),
-            forditas = data.forditas;
-
-        data.tipW = (isNaN(tipW) || tipW < 100) ? config.tipW : tipW;
-        data.tipH = (isNaN(tipH) || tipW < 50) ? config.tipH : tipH;
-        data.fontSize = (isNaN(fontSize) || fontSize < 5) ? config.fontSize : fontSize;
-        data.tipShow = (isNaN(tipShow) || tipShow < 0) ? config.tipShow : tipShow;
-        data.tipHide = (isNaN(tipHide) || tipHide < 0) ? config.tipHide : tipHide;
-        data.forditas = (forditasok.indexOf(forditas) == -1) ? config.forditas : forditas;
-        data.excludeTags = data.excludeTags || config.excludeTags;
-        data.enableFormatting = (data.enableFormatting === undefined) ? config.enableFormatting : data.enableFormatting;
-        data.showNumbers = (data.showNumbers === undefined) ? config.showNumbers : data.showNumbers;
-        // #endif !BROWSER
-        config = data;
     }
 
     function start(element) {
-        // #if !WORDPRESS
-        // #if !EMBEDDED
-        if (d.getElementById('igemutato-script'))
-            return;
-        // #endif !EMBEDDED
-        var css = d.createElement("link");
-        css.setAttribute("rel", "stylesheet");
-        css.setAttribute("type", "text/css");
-        // #if BROWSER
-        css.setAttribute("href", chrome.extension.getURL('igemutato.css'));
-        // #endif BROWSER
-        // #if EMBEDDED
-        css.setAttribute("href", 'http://molnarm.github.io/igemutato.min.css');
-        // #endif EMBEDDED
-        d.getElementsByTagName("head")[0].appendChild(css);
-        // #endif !WORDPRESS
         forditas = config.forditas;
         excludes = config.excludeTags.split(',');
         createTooltip();
@@ -404,7 +367,3 @@ var Szentiras = (function () {
         start: start
     };
 })();
-// #if !BROWSER
-window.igemutato && window.igemutato.config && Szentiras.setConfig(window.igemutato.config);
-Szentiras.start(document.body);
-// #endif !BROWSER
