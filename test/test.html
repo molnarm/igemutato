@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Igemutató teszt</title>
+</head>
+<body>
+    <ul>
+        <li>MTörv 30:11-14</li>
+        <li>Zsolt 23</li>
+        <li>Jn 1,1; Jn 1,2; Jn1:3</li>
+        <li>Zsolt 80-82</li>
+    </ul>
+
+    <script>
+        var igemutato = { config: { forditas: 'KNB', fontSize: 16, enableFormatting: false, showNumbers: true, excludeTags: "head,script,input,select,textarea,h1,h2,h3" } },
+            s = document.getElementsByTagName('script')[0],
+            e = document.createElement('script');
+        e.id = 'igemutato-script';
+        e.src = '../build/web/igemutato.min.js';
+        s.parentNode.insertBefore(e, s);
+    </script>
+
+    <iframe width="100%" height="500px" src="http://www.katolikus.hu/igenaptar/" />
+</body>
+</html>

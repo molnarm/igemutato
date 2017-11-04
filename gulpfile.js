@@ -6,6 +6,7 @@ const rename = require("gulp-rename");
 var concat = require('gulp-concat');
 const del = require("del");
 const zip = require("gulp-zip");
+var open = require('gulp-open');
 
 const debug = require("gulp-debug");
 
@@ -14,6 +15,7 @@ const debug = require("gulp-debug");
 const sources = "src/";
 const output = "build/";
 const packages = "packages/";
+const tests = "test/";
 const allFiles = "**/*";
 const notJsFiles = "**/!(*.js)"
 
@@ -128,3 +130,30 @@ function minifyJs(dir) {
         .pipe(gulp.dest(dir));
     del(dir + mainJsFile);
 }
+
+// TESTING
+
+gulp.task("open-chrome", function () {
+    gulp.src(tests + 'test.html')
+        .pipe(open({ app: 'chrome' }));
+});
+
+gulp.task("open-firefox", function () {
+    gulp.src(tests + 'test.html')
+        .pipe(open({ app: 'firefox' }));
+});
+
+gulp.task("open-opera", function () {
+    gulp.src(tests + 'test.html')
+        .pipe(open({ app: 'opera' }));
+});
+
+gulp.task("open-ie", function () {
+    gulp.src(tests + 'test.html')
+        .pipe(open({ app: 'iexplore' }));
+});
+
+//gulp.task("open-edge", function () {
+//    gulp.src(tests + 'test.html')
+//        .pipe(open({ app: 'microsoft-edge:' }));
+//});
