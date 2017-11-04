@@ -143,7 +143,7 @@ s.parentNode.insertBefore(e, s);
 		$options['fontSize'] = (!is_numeric($options['fontSize']) || $options['fontSize'] < 5) ? $defaults['fontSize'] : $options['fontSize'];
 		$options['tipShow'] = (!is_numeric($options['tipShow']) || $options['tipShow'] < 0) ? $defaults['tipShow'] : $options['tipShow'];
 		$options['tipHide'] = (!is_numeric($options['tipHide']) || $options['tipHide'] < 0) ? $defaults['tipHide'] : $options['tipHide'];
-		$options['forditas'] = (!in_array($options['forditas'], array('SZIT', 'KNB', 'KG', 'UF', 'RUF', 'BD'))) ? $defaults['forditas'] : $options['forditas'];
+		$options['forditas'] = (!in_array($options['forditas'], array('SZIT', 'KNB', 'KG', 'UF', 'RUF', 'BD', 'STL'))) ? $defaults['forditas'] : $options['forditas'];
 		$options['excludeTags'] = isset($options['excludeTags']) ? $options['excludeTags'] : $defaults['excludeTags'];
 		$options['enableFormatting'] = !empty($options['enableFormatting']);
 		$options['showNumbers'] = !empty($options['showNumbers']);
