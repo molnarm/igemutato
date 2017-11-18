@@ -2,7 +2,7 @@
 /*
  Plugin Name: Igemutató
  Description: Az oldal tartalmában található szentírási hivatkozásokat jeleníti meg felugró szövegbuborékban.
- Version: 1.4.1
+ Version: 1.4
  Author: Molnár Márton
  License: GPL
  */
