@@ -3,12 +3,11 @@ const gulp = require("gulp");
 const uglify = require("gulp-uglify");
 const cleanCss = require("gulp-clean-css");
 const rename = require("gulp-rename");
-var concat = require('gulp-concat');
+const concat = require('gulp-concat');
 const del = require("del");
 const zip = require("gulp-zip");
-var open = require('gulp-open');
-
-const debug = require("gulp-debug");
+const open = require('gulp-open');
+const pump = require('pump');
 
 // PATHS
 
@@ -17,8 +16,9 @@ const output = "build/";
 const packages = "packages/";
 const tests = "test/";
 const allFiles = "**/*";
-const notJsFiles = "**/!(*.js)"
+const notJsFiles = "**/!(*.js)";
 
+const reftipJsFile = "reftip.js";
 const mainJsFile = "igemutato.js";
 const minMainJsFile = "igemutato.min.js";
 const cssFile = "igemutato.css";
@@ -53,8 +53,14 @@ gulp.task("clean-browser", function () {
     return del(output + browserDir);
 });
 
-gulp.task("copy-src-browser", function () {
-    return gulp.src([sources + browserDir + allFiles, sources + mainJsFile])
+gulp.task("transform-js-browser", function () {
+    return gulp.src([sources + reftipJsFile, sources + mainJsFile])
+        .pipe(concat(mainJsFile))
+        .pipe(gulp.dest(output + browserDir));
+});
+
+gulp.task("copy-src-browser", ["transform-js-browser"], function () {
+    return gulp.src([sources + browserDir + allFiles])
         .pipe(gulp.dest(output + browserDir));
 });
 
@@ -75,13 +81,13 @@ gulp.task("clean-web", function () {
 });
 
 gulp.task("transform-js-web", function () {
-    return gulp.src([sources + mainJsFile, sources + webDir + startJsFile])
+    return gulp.src([sources + reftipJsFile, sources + mainJsFile, sources + webDir + startJsFile])
         .pipe(concat(mainJsFile))
         .pipe(gulp.dest(output + webDir));
 });
 
-gulp.task("minify-js-web", ["transform-js-web"], function () {
-    return minifyJs(output + webDir);
+gulp.task("minify-js-web", ["transform-js-web"], function (callback) {
+    return minifyJs(output + webDir, callback);
 });
 
 gulp.task("build-web", ["copy-css", "minify-js-web"], function () {
@@ -101,13 +107,13 @@ gulp.task("copy-src-wordpress", function () {
 });
 
 gulp.task("transform-js-wordpress", ["copy-src-wordpress"], function () {
-    return gulp.src([sources + mainJsFile, sources + wordPressDir + startJsFile])
+    return gulp.src([sources + reftipJsFile, sources + mainJsFile, sources + wordPressDir + startJsFile])
         .pipe(concat(mainJsFile))
         .pipe(gulp.dest(output + wordPressDir));
 });
 
-gulp.task("minify-js-wordpress", ["transform-js-wordpress"], function () {
-    return minifyJs(output + wordPressDir);
+gulp.task("minify-js-wordpress", ["transform-js-wordpress"], function (callback) {
+    return minifyJs(output + wordPressDir, callback);
 });
 
 gulp.task("prepare-wordpress", ["copy-css", "minify-js-wordpress"], function () {
@@ -123,11 +129,13 @@ gulp.task("build-wordpress", ["prepare-wordpress"], function () {
 
 // UTILITIES
 
-function minifyJs(dir) {
-    gulp.src(dir + mainJsFile)
-        .pipe(uglify())
-        .pipe(rename(minMainJsFile))
-        .pipe(gulp.dest(dir));
+function minifyJs(dir, callback) {
+    pump([gulp.src(dir + mainJsFile),
+            uglify(),
+            rename(minMainJsFile),
+            gulp.dest(dir)
+        ],
+        callback);
     del(dir + mainJsFile);
 }
 
