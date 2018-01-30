@@ -18,7 +18,7 @@ var Szentiras = (function () {
         // tooltip elemei
         forditasSelect,
         // aktuális adatok
-        forditas, ige,
+        forditas, igehely,
         // DOM elemek
         d = document,
         rt = window.RefTip();
@@ -112,7 +112,8 @@ var Szentiras = (function () {
 
     function customizeTooltip(toolTip) {
         var footer = toolTip.getElementsByClassName("igemutato-igehely")[0];
-        var source = footer.getElementsByTagName("div")[0];
+        var source = footer.getElementsByTagName("div")[0],
+            igehely = source.getElementsByTagName("a")[0];
         forditasSelect = d.createElement('select');
         for (var i = 0; i < forditasok.length; i++) {
             option = d.createElement('option');
@@ -125,8 +126,7 @@ var Szentiras = (function () {
         }
         forditasSelect.onchange = function () {
             forditas = forditasSelect.value;
-            // TODO
-            // igehely.href = url + forditas + '/' + ige;
+            igehely.href = url + forditas + '/' + rt.getCurrentRef();
             rt.load();
         };
 

@@ -41,6 +41,7 @@
         tooltip, textBox, refLabel,
         linkTimeout, tipTimeout,
         xmlhttp, cache = {},
+        currentRef,
         d = document, b = d.body, e = d.documentElement;
 
     /**
@@ -100,6 +101,10 @@
     }
 
     function customizeTooltip(tooltip) {
+    }
+
+    function getCurrentRef() {
+        return currentRef;
     }
 
     /*
@@ -291,10 +296,12 @@
         return xhr;
     }
 
+    // this is way too complicated now
     var public = {
         setConfig: setConfig,
         process: process,
-        load:load,
+        load: load,
+        getCurrentRef: getCurrentRef,
 
         // these can be overridden
         showContent: showContent, // text, textBox => show the contents
