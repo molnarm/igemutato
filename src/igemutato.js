@@ -26,7 +26,7 @@ var Szentiras = (function () {
         regexp = /(?:^|[^\w\u00C0-\u017F])((?:[12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)?Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))\.?(?:\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?(?:\s*[-–—]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?)?(?:\s*[\|;]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?(?:\s*[-–—]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?)?)*))(?:(?=[^\w\u00C0-\u017F])|$)/g,
         forditasok = ['KNB', 'SZIT', 'KG', 'UF', 'RUF', 'BD', 'STL'],
         // API URL
-        url = (window.location.protocol == 'https:' ? 'https:' : 'http:') + '//szentiras.hu/',
+        url = 'https://szentiras.hu/',
         api = url + 'api/idezet/',
         // tooltip elemei
         tooltip, szoveg, igehely, forditasSelect,
@@ -42,7 +42,7 @@ var Szentiras = (function () {
         excludes;
 
     // Megkeresi a hivatkozásokat az oldalban
-    // (valaha ez volt a [hibás] kiindulás: http://stackoverflow.com/a/2848304/318508)
+    // (valaha ez volt a [hibás] kiindulás: https://stackoverflow.com/a/2848304/318508)
     function keres(node) {
         var match, next, parent, replacementNode, text, left;
 
@@ -50,7 +50,7 @@ var Szentiras = (function () {
             do {
                 next = node.nextSibling;
                 parent = node.parentNode;
-                if (node.nodeType === 1 && excludes.indexOf(node.nodeName.toLowerCase()) == -1) {
+                if (node.nodeType === 1 && excludes.indexOf(node.nodeName.toLowerCase()) === -1) {
                     keres(node);
                 }
                 else if (node.nodeType === 3) {
@@ -112,7 +112,7 @@ var Szentiras = (function () {
         return a;
     }
 
-    // http://www.html5rocks.com/en/tutorials/cors/
+    // https://www.html5rocks.com/en/tutorials/cors/
     function createCORSRequest(method, target) {
         var xhr = new XMLHttpRequest();
         if ("withCredentials" in xhr) {
@@ -203,7 +203,7 @@ var Szentiras = (function () {
             vers = versek[i].szoveg.trim();
             if (config.showNumbers) {
                 szamok = versszam(versek[i]);
-                if (szamok.fejezet != fejezet) {
+                if (szamok.fejezet !== fejezet) {
                     fejezetElem = d.createElement('span'), fejezetElem.className = 'konyv', setText(fejezetElem, szamok.fejezet);
                     szoveg.appendChild(fejezetElem), szoveg.appendChild(d.createTextNode(' '));
                     fejezet = szamok.fejezet;
@@ -229,7 +229,7 @@ var Szentiras = (function () {
         node = nodes[0];
         do {
             next = node.nextSibling;
-            if (node.nodeType == 3) {
+            if (node.nodeType === 3) {
                 node.textContent += ' ';
                 root.appendChild(node);
             }
@@ -289,7 +289,7 @@ var Szentiras = (function () {
             option = d.createElement('option');
             option.value = forditasok[i];
             setText(option, forditasok[i]);
-            if (forditas == forditasok[i]) {
+            if (forditas === forditasok[i]) {
                 option.selected = true;
             }
             forditasSelect.appendChild(option);
@@ -325,7 +325,7 @@ var Szentiras = (function () {
             hivatkozasUrl = a.getAttribute("data-ref"),
             position = a.getBoundingClientRect(),
             offset = calculateOffset(a),
-            screenW = b.clientWidth || window.innerWidth,
+            screenW = e.clientWidth || window.innerWidth,
             triggerH = a.offsetHeight;
 
         igehely.href = a.href;
@@ -350,7 +350,7 @@ var Szentiras = (function () {
     }
 
     function setConfig(options) {
-        for (key in options) {
+        for (var key in options) {
             config[key] = options[key];
         }
     }
