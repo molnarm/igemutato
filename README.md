@@ -1,7 +1,7 @@
 igemutato
 =========
 
-*Ez itt fejlesztőknek szóló leírás, a felhasználói [itt](http://molnarm.github.io/igemutato/) található.* 
+*Ez itt fejlesztőknek szóló leírás, a felhasználói [itt](https://molnarm.github.io/igemutato/) található.* 
 
 A weboldalak szövegében található szentírási hivakozásokat jeleníti meg, ha rávisszük az egeret. Felismer minden könyv-rövidítést, ami a szentiras.hu szerint helyes (és néhány hibásat is, ezek listája várhatóan bővülni fog).
 
