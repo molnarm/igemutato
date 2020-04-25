@@ -33,7 +33,7 @@ var Szentiras = (function () {
         // timeoutok
         linkTimeout, tipTimeout,
         // lekérdezések kellékei
-        xmlhttp, cache = {},
+        callApi, cache = {},
         // aktuális adatok
         forditas, ige,
         // DOM elemek
@@ -112,53 +112,21 @@ var Szentiras = (function () {
         return a;
     }
 
-    // https://www.html5rocks.com/en/tutorials/cors/
-    function createCORSRequest(method, target) {
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr) {
-            xhr.open(method, target, true);
-        }
-        else if (typeof XDomainRequest != "undefined") {
-            xhr = new XDomainRequest();
-            xhr.open(method, target);
-        }
-        else {
-            xhr = null;
-        }
-        return xhr;
-    }
-
     // Betölti a hivatkozott szöveget
     function fetch() {
-        xmlhttp && xmlhttp.abort();
-
         if (cache[forditas] && cache[forditas][ige]) {
-            addContent(cache[forditas][ige]);
-            szoveg.scrollTop = 0;
+            show(cache[forditas][ige]);
             return;
         }
 
-        var src = api + ige + '/' + forditas,
-            success = function () {
-                try {
-                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                        show(JSON.parse(xmlhttp.responseText));
-                        return;
-                    }
-                }
-                catch (ex) {
-                    console && console.log && console.log(ex.message);
-                }
-                if (xmlhttp.readyState !== 0) {
-                    szoveg.textContent = 'A betöltés sikertelen :-(';
-                }
-            };
-
-        xmlhttp = createCORSRequest('GET', src);
-
-        xmlhttp.onreadystatechange = success;
-
-        xmlhttp.send();
+        callApi(api, ige, forditas, function(result) {
+            if(!result){
+                szoveg.textContent = 'A betöltés sikertelen :-(';
+                return;
+            }
+    
+            show(result);
+        });       
     }
 
     // Feldolgozza a JSON választ
@@ -176,7 +144,7 @@ var Szentiras = (function () {
                         var versek = json.valasz.versek;
                         addContent(versek);
                         cache[forditas] || (cache[forditas] = {});
-                        cache[forditas][ige] = versek;
+                        cache[forditas][ige] = json;
                         szoveg.scrollTop = 0;
                         return;
                     }
@@ -200,6 +168,9 @@ var Szentiras = (function () {
             szoveg.removeChild(szoveg.firstChild);
         }
         for (i = 0; i < versek.length; i++) {
+            if(!versek[i].szoveg)
+                continue;
+
             vers = versek[i].szoveg.trim();
             if (config.showNumbers) {
                 szamok = versszam(versek[i]);
@@ -221,6 +192,8 @@ var Szentiras = (function () {
                 szoveg.appendChild(d.createTextNode((vers.replace(/<[^>]+>/g, ' ') + ' ').replace(/\s+/g, ' ')));
             }
         }
+
+        szoveg.scrollTop = 0;
     }
 
     function addElements(root, nodes) {
@@ -362,8 +335,13 @@ var Szentiras = (function () {
         keres(element);
     }
 
+    function patchApi(makeRequest) {
+        callApi = makeRequest;
+    }
+
     return {
         setConfig: setConfig,
-        start: start
+        start: start,
+        patchApi: patchApi
     };
 })();

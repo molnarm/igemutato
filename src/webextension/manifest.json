@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Szentírás",
   "description": "Bibliai hivatkozások beillesztése a Szentírás.hu oldalról",
-  "version": "1.5",
+  "version": "1.6",
   "icons": {
     "128": "icon.png"
   },
@@ -21,6 +21,9 @@
       "all_frames": true
     }
   ],
+  "background": {
+    "scripts": [ "background.js" ]
+  },
   "web_accessible_resources": [
     "igemutato.css"
   ]

@@ -7,8 +7,6 @@ var concat = require('gulp-concat');
 const del = require("del");
 const zip = require("gulp-zip");
 
-const debug = require("gulp-debug");
-
 // PATHS
 
 const sources = "src/";
@@ -17,6 +15,7 @@ const packages = "packages/";
 const allFiles = "**/*";
 const notJsFiles = "**/!(*.js)"
 
+const apiJsFile = sources + "api.js";
 const mainJsFile = "igemutato.js";
 const minMainJsFile = "igemutato.min.js";
 const cssFile = "igemutato.css";
@@ -25,6 +24,7 @@ const startJsFile = "start.js";
 
 const browserDir = "webextension/";
 const browserZipFile = "extension.zip";
+const backgroundJs = 'background.js';
 
 const webDir = "web/";
 
@@ -51,8 +51,14 @@ gulp.task("clean-browser", function () {
     return del(output + browserDir);
 });
 
-gulp.task("copy-src-browser", function () {
-    return gulp.src([sources + browserDir + allFiles, sources + mainJsFile])
+gulp.task("transform-js-browser", function (){
+    return gulp.src([apiJsFile, sources + browserDir + backgroundJs])
+    .pipe(concat(backgroundJs))
+    .pipe(gulp.dest(output + browserDir))
+});
+
+gulp.task("copy-src-browser", ["transform-js-browser"], function () {
+    return gulp.src([sources + browserDir + '**/!(' + backgroundJs + ')', sources + mainJsFile])
         .pipe(gulp.dest(output + browserDir));
 });
 
@@ -73,7 +79,7 @@ gulp.task("clean-web", function () {
 });
 
 gulp.task("transform-js-web", function () {
-    return gulp.src([sources + mainJsFile, sources + webDir + startJsFile])
+    return gulp.src([ apiJsFile, sources + mainJsFile, sources + webDir + startJsFile])
         .pipe(concat(mainJsFile))
         .pipe(gulp.dest(output + webDir));
 });
@@ -99,7 +105,7 @@ gulp.task("copy-src-wordpress", function () {
 });
 
 gulp.task("transform-js-wordpress", ["copy-src-wordpress"], function () {
-    return gulp.src([sources + mainJsFile, sources + wordPressDir + startJsFile])
+    return gulp.src([apiJsFile, sources + mainJsFile, sources + wordPressDir + startJsFile])
         .pipe(concat(mainJsFile))
         .pipe(gulp.dest(output + wordPressDir));
 });

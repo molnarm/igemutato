@@ -2,7 +2,7 @@
 /*
  Plugin Name: Igemutató
  Description: Az oldal tartalmában található szentírási hivatkozásokat jeleníti meg felugró szövegbuborékban.
- Version: 1.5
+ Version: 1.6
  Author: Molnár Márton
  License: GPL
  */
@@ -138,11 +138,11 @@ s.parentNode.insertBefore(e, s);
 	public function validate_options($options) {
 		$defaults = Igemutato::get_default_settings();
 		
-		$options['tipW'] = (!is_numeric($options['tipW']) || $options['tipW'] < 100) ? $defaults['tipW'] : $options['tipW'];
-		$options['tipH'] = (!is_numeric($options['tipH']) || $options['tipH'] < 50) ? $defaults['tipH'] : $options['tipH'];
-		$options['fontSize'] = (!is_numeric($options['fontSize']) || $options['fontSize'] < 5) ? $defaults['fontSize'] : $options['fontSize'];
-		$options['tipShow'] = (!is_numeric($options['tipShow']) || $options['tipShow'] < 0) ? $defaults['tipShow'] : $options['tipShow'];
-		$options['tipHide'] = (!is_numeric($options['tipHide']) || $options['tipHide'] < 0) ? $defaults['tipHide'] : $options['tipHide'];
+		$options['tipW'] = (!is_int($options['tipW']) || $options['tipW'] < 100) ? $defaults['tipW'] : intval($options['tipW']);
+		$options['tipH'] = (!is_int($options['tipH']) || $options['tipH'] < 50) ? $defaults['tipH'] : intval($options['tipH']);
+		$options['fontSize'] = (!is_int($options['fontSize']) || $options['fontSize'] < 5) ? $defaults['fontSize'] : intval($options['fontSize']);
+		$options['tipShow'] = (!is_int($options['tipShow']) || $options['tipShow'] < 0) ? $defaults['tipShow'] : intval($options['tipShow']);
+		$options['tipHide'] = (!is_int($options['tipHide']) || $options['tipHide'] < 0) ? $defaults['tipHide'] : intval($options['tipHide']);
 		$options['forditas'] = (!in_array($options['forditas'], array('SZIT', 'KNB', 'KG', 'UF', 'RUF', 'BD', 'STL'))) ? $defaults['forditas'] : $options['forditas'];
 		$options['excludeTags'] = isset($options['excludeTags']) ? $options['excludeTags'] : $defaults['excludeTags'];
 		$options['enableFormatting'] = !empty($options['enableFormatting']);
