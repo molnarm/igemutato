@@ -30,8 +30,6 @@ const webDir = "web/";
 
 const wordPressDir = "wordpress/";
 
-// COMMON TASKS
-
 gulp.task("copy-css", function () {
     return gulp.src(sources + cssFile)
         .pipe(gulp.dest(output))
@@ -40,15 +38,10 @@ gulp.task("copy-css", function () {
         .pipe(gulp.dest(output));
 });
 
-gulp.task("clean", ["clean-browser", "clean-web", "clean-wordpress"], function () {
-    return del([output + allFiles, packages + allFiles]);
-});
-gulp.task("build", ["build-browser", "build-web", "build-wordpress"]);
-
 // BROWSER
 
 gulp.task("clean-browser", function () {
-    return del(output + browserDir);
+    return del.deleteAsync(output + browserDir);
 });
 
 gulp.task("transform-js-browser", function (){
@@ -57,25 +50,25 @@ gulp.task("transform-js-browser", function (){
     .pipe(gulp.dest(output + browserDir))
 });
 
-gulp.task("copy-src-browser", ["transform-js-browser"], function () {
+gulp.task("copy-src-browser", gulp.series("transform-js-browser", function () {
     return gulp.src([sources + browserDir + '**/!(' + backgroundJs + ')', sources + mainJsFile])
         .pipe(gulp.dest(output + browserDir));
-});
+}));
 
-gulp.task("prepare-browser", ["copy-css", "copy-src-browser"], function () {
+gulp.task("prepare-browser", gulp.series(gulp.parallel("copy-css", "copy-src-browser"), function () {
     return gulp.src(output + cssFile)
         .pipe(gulp.dest(output + browserDir));
-});
-gulp.task("build-browser", ["prepare-browser"], function () {
+}));
+gulp.task("build-browser", gulp.series("prepare-browser", function () {
     return gulp.src(output + browserDir + allFiles)
         .pipe(zip(browserZipFile))
         .pipe(gulp.dest(packages));
-});
+}));
 
 // WEB
 
 gulp.task("clean-web", function () {
-    return del(output + webDir);
+    return del.deleteAsync(output + webDir);
 });
 
 gulp.task("transform-js-web", function () {
@@ -84,19 +77,19 @@ gulp.task("transform-js-web", function () {
         .pipe(gulp.dest(output + webDir));
 });
 
-gulp.task("minify-js-web", ["transform-js-web"], function () {
+gulp.task("minify-js-web", gulp.series("transform-js-web", function () {
     return minifyJs(output + webDir);
-});
+}));
 
-gulp.task("build-web", ["copy-css", "minify-js-web"], function () {
+gulp.task("build-web", gulp.series(gulp.parallel("copy-css", "minify-js-web"), function () {
     return gulp.src(output + minCssFile)
         .pipe(gulp.dest(output + webDir));
-});
+}));
 
 // WORDPRESS
 
 gulp.task("clean-wordpress", function () {
-    return del(output + wordPressDir);
+    return del.deleteAsync(output + wordPressDir);
 });
 
 gulp.task("copy-src-wordpress", function () {
@@ -104,26 +97,33 @@ gulp.task("copy-src-wordpress", function () {
         .pipe(gulp.dest(output + wordPressDir));
 });
 
-gulp.task("transform-js-wordpress", ["copy-src-wordpress"], function () {
+gulp.task("transform-js-wordpress", gulp.series("copy-src-wordpress", function () {
     return gulp.src([apiJsFile, sources + mainJsFile, sources + wordPressDir + startJsFile])
         .pipe(concat(mainJsFile))
         .pipe(gulp.dest(output + wordPressDir));
-});
+}));
 
-gulp.task("minify-js-wordpress", ["transform-js-wordpress"], function () {
+gulp.task("minify-js-wordpress", gulp.series("transform-js-wordpress", function () {
     return minifyJs(output + wordPressDir);
-});
+}));
 
-gulp.task("prepare-wordpress", ["copy-css", "minify-js-wordpress"], function () {
+gulp.task("prepare-wordpress", gulp.series(gulp.parallel("copy-css", "minify-js-wordpress"), function () {
     return gulp.src(output + minCssFile)
         .pipe(gulp.dest(output + wordPressDir));
-});
+}));
 
-gulp.task("build-wordpress", ["prepare-wordpress"], function () {
+gulp.task("build-wordpress", gulp.series("prepare-wordpress", function () {
     return gulp.src(output + wordPressDir + allFiles)
         .pipe(zip('wordpress.zip'))
         .pipe(gulp.dest(packages));
-});
+}));
+
+// COMMON TASKS
+
+gulp.task("clean", gulp.series(gulp.parallel("clean-browser", "clean-web", "clean-wordpress"), function () {
+    return del.deleteAsync([output + allFiles, packages + allFiles]);
+}));
+gulp.task("build", gulp.parallel("build-browser", "build-web", "build-wordpress"));
 
 // UTILITIES
 
@@ -132,5 +132,5 @@ function minifyJs(dir) {
         .pipe(uglify())
         .pipe(rename(minMainJsFile))
         .pipe(gulp.dest(dir));
-    del(dir + mainJsFile);
+    return del.deleteAsync(dir + mainJsFile);
 }
