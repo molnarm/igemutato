@@ -3,7 +3,7 @@ Contributors: molnarm
 Tags: bible, biblia, szentírás, tooltip
 Plugin URI: http://molnarm.github.io/igemutato/
 Requires at least: 2.7
-Tested up to: 5.4
+Tested up to: 6.7
 Stable tag: 1.6.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
