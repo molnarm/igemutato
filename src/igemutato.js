@@ -26,7 +26,7 @@ var Szentiras = (function () {
         regexp = /(?:^|[^\w\u00C0-\u017F])((?:[12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im))|[1-3]Já?n(?:os)?|[1-5]Móz(?:es)?|(?:Ap)?Csel|A(?:gg?|bd)|Ám(?:ós)?|B(?:ár|[ií]r(?:ák)?|ölcs)|Dán|É(?:sa|zs|n(?:ek(?:ek|Én)?)?)|E(?:f(?:éz)?|szt?|z(?:s?dr?)?)|Fil(?:em)?|Gal|H(?:a[bg]|ós)|Iz|J(?:ak|á?n(?:os)?|e[lr]|o(?:el)?|ó(?:[bn]|zs|el)|[Ss]ir(?:alm?)?|úd(?:ás)?|ud(?:it)?)|K(?:iv|ol)|L(?:ev|u?k(?:ács)?)|M(?:al(?:ak)?|á?té?|(?:ár)?k|ik|Törv)|N[áe]h|(?:Ó|O)z|P(?:él|ré)d|R(?:óm|[uú]th?)|S(?:ir(?:alm?)?|ír|z?of|zám)|T(?:er|it|ób)|Z(?:ak|of|s(?:olt|id)?))\.?(?:\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?(?:\s*[-–—]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?)?(?:\s*[\|;]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?(?:\s*[-–—]\s*[0-9]{1,3}(?:[,:]\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?(?:\.\s*[0-9]{1,2}[a-z]?(?:\s*[-–—]\s*[0-9]{1,2}[a-z]?\b(?![,:]))?)*)?)?)*))(?:(?=[^\w\u00C0-\u017F])|$)/g,
         forditasok = ['KNB', 'SZIT', 'KG', 'UF', 'RUF', 'BD', 'STL'],
         // API URL
-        url = 'https://regi.szentiras.hu/',
+        url = 'https://szentiras.eu/',
         api = url + 'api/idezet/',
         // tooltip elemei
         tooltip, szoveg, igehely, forditasSelect,
@@ -217,10 +217,10 @@ var Szentiras = (function () {
     }
 
     function versszam(vers) {
-        var kod = vers.hely.gepi.toString();
+        var kod = vers.hely.gepi.split('_');
         return {
-            fejezet: parseInt(kod.substring(3, 6), 10),
-            vers: parseInt(kod.substring(6, 9), 10)
+            fejezet: parseInt(kod[1]),
+            vers: parseInt(kod[2])
         };
     }
 
@@ -273,7 +273,7 @@ var Szentiras = (function () {
             fetch();
         };
 
-        forras = d.createElement('a'), forras.href = url, forras.target = '_blank', setText(forras, 'szentiras.hu »');
+        forras = d.createElement('a'), forras.href = url, forras.target = '_blank', setText(forras, 'szentiras.eu »');
         span = d.createElement('span'), span.appendChild(forras);
 
         footer.appendChild(span);
