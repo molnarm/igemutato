@@ -1,6 +1,7 @@
 /.git
 /wordpress-svn/
 /.vs
+/.idea
 /node_modules
 /todo.txt
 /igemutato.sln
