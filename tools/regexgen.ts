@@ -4,8 +4,6 @@
  *  	és túl sok hamis pozitívot is eredményezne (Ez, Ének, Zsolt, Ám, Bár stb...)). Ha mégis ezt szeretnénk, kell a végére egy ? és kész.
  *  - a pontosvesszővel elválasztott önálló hivatkozásokat egyenként ismeri fel, nem egyben
  *  - cserébe | helyett ;-t is elfogad fejezet-elválasztónak
- *  
- *  Ellenőrzéshez: https://regex101.com/r/gG9gN1
  */
 
 // ez kézzel készül, hogy rövid legyen, felismeri az összes jó rövidítést és néhány rosszat, majd bővéteni kell egy kicsit
@@ -13,7 +11,7 @@ const books = '(?:[12](?:K(?:[io]r|rón)|Makk?|Pé?t(?:er)?|Sám|T(?:h?essz?|im)
 
 const space = '\\s*';
 
-const verseId = '[0-9]{1,2}[a-z]?';
+const verseId = '[0-9]{1,3}[a-z]?';
 const chapterId = '[0-9]{1,3}';
 
 // ez itt trükkös, a több fejezet közötti hivatkozás (pl. Mk 1,2-3,4) elejét nem szabad rögtön felismerni verseRange-ként, mert ez majd egy chapterRange lesz!
