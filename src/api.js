@@ -1,16 +1,20 @@
 var Szentiras_API = function(){
     // lekérdezések kellékei
     var xmlhttp;
+    // a böngészőben úgyis bárki meg tudja nézni a kulcsot
+    var API_KEY = 'faeb977c-6be4-43f0-8241-7069eb62d20e';
 
     // https://www.html5rocks.com/en/tutorials/cors/
     function createCORSRequest(method, target) {
         var xhr = new XMLHttpRequest();
         if ("withCredentials" in xhr) {
             xhr.open(method, target, true);
+            xhr.setRequestHeader('X-API-Key', API_KEY);
         }
         else if (typeof XDomainRequest != "undefined") {
             xhr = new XDomainRequest();
             xhr.open(method, target);
+            xhr.setRequestHeader('X-API-Key', API_KEY);
         }
         else {
             xhr = null;
